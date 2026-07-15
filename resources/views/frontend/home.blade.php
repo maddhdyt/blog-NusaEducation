@@ -1,242 +1,131 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <div class="bg-gray-50 text-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
-            @php
-                $placeholder = 'https://placehold.co/900x600?text=No+Image';
-            @endphp
-
-            {{-- Hero + highlight strip --}}
-            <section class="grid gap-6 lg:grid-cols-3">
-                @if ($heroPost)
-                    @php
-                        $heroImage = $heroPost->thumbnail_url ?? $placeholder;
-                    @endphp
-                    <article
-                        class="relative overflow-hidden rounded-2xl bg-gray-900 text-white min-h-[420px] lg:col-span-2 shadow-lg">
-                        <img src="{{ $heroImage }}" alt="{{ $heroPost->title }}"
-                            class="absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/65 to-gray-900/20"></div>
-                        <div class="relative flex h-full flex-col justify-end p-8 sm:p-10">
-                            <div class="flex items-center gap-3 text-xs text-gray-200">
-                                <span
-                                    class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 font-semibold text-blue-100">
-                                    {{ $heroPost->category->name ?? 'Umum' }}
-                                </span>
-                                <span class="rounded-full bg-white/10 px-3 py-1">
-                                    {{ optional($heroPost->published_at ?? $heroPost->created_at)->translatedFormat('d M Y') }}
-                                </span>
-                            </div>
-                            <h1 class="mt-4 text-3xl sm:text-4xl font-semibold leading-tight">{{ $heroPost->title }}</h1>
-                            <p class="mt-4 text-base text-gray-200 line-clamp-3">
-                                {{ \Illuminate\Support\Str::limit($heroPost->excerpt ?: strip_tags($heroPost->content ?? ''), 180) }}
-                            </p>
-                            <div class="mt-6 flex items-center gap-4 text-sm text-gray-200">
-                                <span
-                                    class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/10">
-                                    {{ \Illuminate\Support\Str::of($heroPost->user->name ?? 'Author')->substr(0, 1)->upper() }}
-                                </span>
-                                <div>
-                                    <p class="font-semibold">{{ $heroPost->user->name ?? 'Author' }}</p>
-                                    <p class="text-gray-300">{{ $heroPost->user->role ?? 'Kontributor' }}</p>
-                                </div>
-                                <a href="{{ route('posts.show', $heroPost->slug) }}"
-                                    class="ml-auto inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition">
-                                    Baca selengkapnya
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                @else
-                    <div class="lg:col-span-3 rounded-2xl bg-white border border-gray-200 shadow-sm p-8 text-center">
-                        <p class="text-gray-600">Belum ada artikel yang dipublikasikan.</p>
-                    </div>
-                @endif
-
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-900">Sorotan</h3>
-                        <span class="text-sm text-gray-500">{{ $topStripPosts->count() }} cerita</span>
-                    </div>
-                    @forelse ($topStripPosts as $post)
-                        @php
-                            $image = $post->thumbnail_url ?? $placeholder;
-                        @endphp
-                        <article class="flex gap-3 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                            <img src="{{ $image }}" alt="{{ $post->title }}" class="h-28 w-28 object-cover">
-                            <div class="flex flex-1 flex-col justify-between p-4">
-                                <div class="flex items-center gap-2 text-xs text-gray-500">
-                                    <span class="font-semibold text-blue-600">{{ $post->category->name ?? 'Umum' }}</span>
-                                    <span>&middot;</span>
-                                    <time
-                                        datetime="{{ optional($post->published_at ?? $post->created_at)->toDateString() }}">
-                                        {{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}
-                                    </time>
-                                </div>
-                                <h4 class="text-sm font-semibold leading-5 text-gray-900 line-clamp-2">
-                                    <a href="{{ route('posts.show', $post->slug) }}"
-                                        class="hover:text-blue-600">{{ $post->title }}</a>
-                                </h4>
-                                <p class="text-xs text-gray-600 line-clamp-2">
-                                    {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 90) }}
-                                </p>
-                            </div>
-                        </article>
-                    @empty
-                        <p class="text-sm text-gray-500">Sorotan belum tersedia.</p>
-                    @endforelse
+    <div class="bg-[#FDF6F0] text-gray-900">
+        @php
+            $placeholder = 'https://placehold.co/900x600?text=No+Image';
+        @endphp
+        <!-- Editorial Hero Section -->
+        <div class="pt-10 pb-16">
+            <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-24">
+                
+                <!-- Main Blog Header (Jasper Style) -->
+                <div class="text-center w-full mx-auto mb-16 pt-4 sm:pt-8 px-4">
+                    <span class="inline-block px-1 mb-6 text-sm font-bold text-gray-600 bg-white tracking-widest font-mono">
+                        Blog Nusa Education
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl lg:text-6xl font-normal text-faux-semibold text-gray-900 tracking-tight font-heading leading-[1.1] whitespace-nowrap">
+                        Wawasan & Strategi Digital Terkini
+                    </h2>
                 </div>
-            </section>
 
-            {{-- Latest grid + sidebar --}}
-            <section class="grid gap-8 lg:grid-cols-4">
-                <div class="lg:col-span-3 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-2xl font-semibold text-gray-900">Terbaru</h2>
-                        <a href="{{ route('posts.index') }}"
-                            class="text-sm font-semibold text-blue-600 hover:text-blue-700">Lihat semua</a>
-                    </div>
-                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        @forelse ($featureGridPosts as $post)
-                            @php
-                                $image = $post->thumbnail_url ?? $placeholder;
-                            @endphp
-                            <article
-                                class="group rounded-2xl bg-white shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-                                <div class="relative">
-                                    <img src="{{ $image }}" alt="{{ $post->title }}"
-                                        class="h-44 w-full object-cover">
-                                    <span
-                                        class="absolute left-3 top-3 inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-blue-700 ring-1 ring-blue-100">
-                                        {{ $post->category->name ?? 'Umum' }}
-                                    </span>
-                                </div>
-                                <div class="p-4 flex-1 flex flex-col">
-                                    <div class="text-xs text-gray-500 flex items-center gap-2">
-                                        <time
-                                            datetime="{{ optional($post->published_at ?? $post->created_at)->toDateString() }}">
-                                            {{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}
-                                        </time>
-                                    </div>
-                                    <h3
-                                        class="mt-2 text-lg font-semibold leading-6 text-gray-900 group-hover:text-blue-600 line-clamp-2">
-                                        <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
-                                    </h3>
-                                    <p class="mt-2 text-sm text-gray-600 line-clamp-3">
-                                        {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 120) }}
+                @if ($heroPost)
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                        
+                        <!-- Left Column: Featured Hero Post (col-span-8) -->
+                        <div class="lg:col-span-8">
+                            <article class="flex flex-col group bg-white">
+                                @if($heroPost->thumbnail_url)
+                                <a href="{{ route('posts.show', $heroPost->slug) }}" class="block overflow-hidden">
+                                    <img src="{{ $heroPost->thumbnail_url }}" alt="{{ $heroPost->title }}" class="w-full h-[400px] sm:h-[500px] object-cover hover:scale-[1.02] transition duration-700">
+                                </a>
+                                @endif
+                                
+                                <div class="p-6 lg:p-8 flex flex-col">
+                                    <h1 class="text-3xl sm:text-4xl lg:text-[42px] font-normal text-faux-medium text-[#0a1435] tracking-tight font-heading leading-[1.1] mb-4">
+                                        <a href="{{ route('posts.show', $heroPost->slug) }}" class="hover:text-brand-primary transition">
+                                            {{ $heroPost->title }}
+                                        </a>
+                                    </h1>
+                                    
+                                    <p class="text-[15px] sm:text-base text-gray-800 mb-5 leading-relaxed max-w-3xl">
+                                        {{ \Illuminate\Support\Str::limit($heroPost->excerpt ?: strip_tags($heroPost->content ?? ''), 160) }}
                                     </p>
-                                    <div class="mt-4 flex items-center gap-3 text-sm text-gray-600">
-                                        <span
-                                            class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700 font-semibold">
-                                            {{ \Illuminate\Support\Str::of($post->user->name ?? 'A')->substr(0, 1)->upper() }}
-                                        </span>
-                                        <div>
-                                            <p class="font-semibold text-gray-900">{{ $post->user->name ?? 'Author' }}</p>
-                                            <p class="text-gray-500">{{ $post->user->role ?? 'Kontributor' }}</p>
-                                        </div>
+                                    
+                                    <div class="inline-flex items-center self-start gap-2 text-xs text-[#705652] bg-[#FCECE9] px-2 py-0.5 font-mono">
+                                        <span>{{ optional($heroPost->published_at ?? $heroPost->created_at)->translatedFormat('F j, Y') }}</span>
+                                        <span>|</span>
+                                        <span>{{ $heroPost->user->name ?? 'Admin' }}</span>
                                     </div>
                                 </div>
                             </article>
-                        @empty
-                            <p class="text-gray-600">Belum ada artikel terbaru.</p>
-                        @endforelse
-                    </div>
-                </div>
+                        </div>
 
-                <aside class="space-y-6">
-                    @php
-                        $profileUser = optional($heroPost?->user);
-                        $sidebarAuthorName = optional($sidebar)->author_name ?? ($profileUser->name ?? 'Tim Redaksi');
-                        $sidebarAuthorRole = optional($sidebar)->author_role ?? ($profileUser->role ?? 'Kontributor');
-                        $sidebarBio =
-                            optional($sidebar)->author_bio ?? 'Ikuti akun kami untuk update terbaru seputar artikel.';
-                        $avatar =
-                            optional($sidebar)->author_avatar_url ?:
-                            'https://ui-avatars.com/api/?name=' .
-                                urlencode($sidebarAuthorName) .
-                                '&background=e8edff&color=312e81';
-                    @endphp
-                    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Profil Penulis</p>
-                        <div class="mt-4 flex items-center gap-4">
-                            <img src="{{ $avatar }}" alt="{{ $sidebarAuthorName }}"
-                                class="h-14 w-14 rounded-full object-cover bg-blue-50">
-                            <div>
-                                <p class="text-lg font-semibold text-gray-900">{{ $sidebarAuthorName }}</p>
-                                <p class="text-sm text-gray-500">{{ $sidebarAuthorRole }}</p>
+                        <!-- Right Column: Popular / Sorotan Posts (col-span-4) -->
+                        <div class="lg:col-span-4 h-full flex flex-col pt-8 lg:pt-12 relative before:hidden lg:before:block before:absolute before:-left-6 before:top-12 before:bottom-12 before:w-px before:bg-[#e2d5cf]">
+                            <h3 class="text-3xl lg:text-[40px] font-normal text-faux-medium text-[#0a1435] font-heading mb-8 self-start whitespace-nowrap bg-white pr-3 py-0 leading-none relative z-10">
+                                Sorotan Minggu Ini
+                            </h3>
+                            
+                            <div class="flex flex-col gap-2">
+                                @forelse ($topStripPosts as $post)
+                                    <article class="flex flex-col group hover:bg-white p-4 -mx-4 transition-colors duration-300">
+                                        <div class="inline-flex items-center gap-1.5 text-xs text-[#735A56] bg-white px-1.5 py-0 font-mono mb-2 self-start">
+                                            <time datetime="{{ optional($post->published_at ?? $post->created_at)->toDateString() }}">
+                                                {{ optional($post->published_at ?? $post->created_at)->translatedFormat('F j') }}
+                                            </time>
+                                            <span>|</span>
+                                            <span>{{ $post->user->name ?? 'Admin' }}</span>
+                                        </div>
+                                        <h4 class="text-xl sm:text-[22px] font-normal text-faux-medium leading-snug text-[#0a1435] font-heading group-hover:text-brand-primary transition mb-2">
+                                            <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
+                                        </h4>
+                                        <p class="text-[13px] sm:text-sm text-[#6b5b59] line-clamp-3 leading-relaxed">
+                                            {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 110) }}
+                                        </p>
+                                    </article>
+                                @empty
+                                    <p class="text-sm text-gray-500">Sorotan belum tersedia.</p>
+                                @endforelse
                             </div>
                         </div>
-                        <p class="mt-3 text-sm text-gray-600">{{ $sidebarBio }}</p>
-                        <div class="mt-4 grid grid-cols-3 gap-3 text-center">
-                            @if (optional($sidebar)->author_tiktok_url)
-                                <a href="{{ optional($sidebar)->author_tiktok_url }}"
-                                    class="rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:border-blue-200">TikTok</a>
-                            @endif
-                            @if (optional($sidebar)->author_youtube_url)
-                                <a href="{{ optional($sidebar)->author_youtube_url }}"
-                                    class="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 hover:border-red-200">YouTube</a>
-                            @endif
-                            @if (optional($sidebar)->author_newsletter_url)
-                                <a href="{{ optional($sidebar)->author_newsletter_url }}"
-                                    class="rounded-xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 hover:border-gray-300">Newsletter</a>
-                            @endif
-                        </div>
+                        
                     </div>
+                @endif
+            </div>
+        </div>
 
-                    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                        <h3 class="text-base font-semibold text-gray-900">Kategori Populer</h3>
-                        <div class="mt-4 space-y-3">
-                            @forelse ($categories as $category)
-                                <a href="{{ route('categories.show', $category->slug) }}"
-                                    class="flex items-center justify-between rounded-xl border border-gray-100 px-4 py-3 hover:border-blue-200 hover:bg-blue-50 transition">
-                                    <span class="font-medium text-gray-900">{{ $category->name }}</span>
-                                    <span class="text-sm text-gray-500">{{ $category->published_posts_count }}
-                                        artikel</span>
-                                </a>
-                            @empty
-                                <p class="text-sm text-gray-600">Belum ada kategori.</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </aside>
-            </section>
+        <!-- Main Content Area -->
+        <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-16 space-y-16">
 
-            {{-- Spotlight stories --}}
-            <section class="space-y-6">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-semibold text-gray-900">Sorotan Minggu Ini</h2>
-                    <span class="text-sm text-gray-500">Pilihan editor</span>
+            {{-- Latest grid (Full width now, no sidebar) --}}
+            <section id="terbaru" class="space-y-6">
+                <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                    <h2 class="text-3xl font-normal text-faux-semibold text-gray-900 font-heading">Artikel Terbaru</h2>
+                    <a href="{{ route('posts.index') }}"
+                        class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-[#0a1435] border border-[#0a1435] hover:bg-[#0a1435] hover:text-white transition-colors duration-200">
+                        Lihat semua
+                    </a>
                 </div>
-
-                <div class="grid gap-6 lg:grid-cols-3">
-                    @forelse ($spotlightPosts as $post)
+                
+                <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    @forelse ($featureGridPosts as $post)
                         @php
-                            $image = $post->thumbnail_url ?? $placeholder;
+                            $image = $post->thumbnail_url ?? 'https://placehold.co/900x600?text=No+Image';
                         @endphp
-                        <article class="flex gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-                            <img src="{{ $image }}" alt="{{ $post->title }}"
-                                class="h-32 w-32 rounded-xl object-cover">
-                            <div class="flex flex-1 flex-col justify-between">
-                                <div class="flex items-center gap-2 text-xs text-gray-500">
-                                    <span class="font-semibold text-blue-600">{{ $post->category->name ?? 'Umum' }}</span>
-                                    <span>&middot;</span>
-                                    <time
-                                        datetime="{{ optional($post->published_at ?? $post->created_at)->toDateString() }}">
-                                        {{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}
-                                    </time>
-                                </div>
-                                <h3 class="text-lg font-semibold leading-6 text-gray-900 line-clamp-2">
-                                    <a href="{{ route('posts.show', $post->slug) }}"
-                                        class="hover:text-blue-600">{{ $post->title }}</a>
+                        <article class="flex flex-col group bg-white">
+                            <a href="{{ route('posts.show', $post->slug) }}" class="block overflow-hidden aspect-video w-full">
+                                <img src="{{ $image }}" alt="{{ $post->title }}"
+                                    class="h-full w-full object-cover group-hover:scale-105 transition duration-700">
+                            </a>
+                            <div class="flex flex-1 flex-col p-6 sm:p-8">
+                                <h3 class="text-[22px] sm:text-2xl font-normal text-faux-medium leading-snug text-[#0a1435] font-heading group-hover:text-brand-primary transition mb-3">
+                                    <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
                                 </h3>
-                                <p class="text-sm text-gray-600 line-clamp-3">
-                                    {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 110) }}
+                                <p class="text-[14px] sm:text-[15px] text-[#6b5b59] line-clamp-3 leading-relaxed mb-8">
+                                    {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 120) }}
                                 </p>
+                                <div class="mt-auto inline-flex items-center self-start gap-2 text-xs text-[#705652] bg-[#FCECE9] px-2 py-0.5 font-mono tracking-wide">
+                                    <time datetime="{{ optional($post->published_at ?? $post->created_at)->toDateString() }}">
+                                        {{ optional($post->published_at ?? $post->created_at)->translatedFormat('F j, Y') }}
+                                    </time>
+                                    <span>|</span>
+                                    <span>{{ $post->user->name ?? 'Admin' }}</span>
+                                </div>
                             </div>
                         </article>
                     @empty
-                        <p class="text-gray-600">Belum ada sorotan.</p>
+                        <p class="text-gray-600 col-span-full">Belum ada artikel terbaru.</p>
                     @endforelse
                 </div>
             </section>

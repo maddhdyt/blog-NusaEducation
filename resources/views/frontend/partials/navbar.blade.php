@@ -8,24 +8,20 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    @if (optional($sidebarSetting)->site_logo_url)
-                        <img src="{{ $sidebarSetting->site_logo_url }}" alt="{{ config('app.name') }}" class="h-10 w-auto">
-                    @else
-                        <span class="text-2xl font-bold text-blue-600">{{ config('app.name') }}</span>
-                    @endif
+                    <img src="https://ik.imagekit.io/yqhp1cmbp/logo%20nusa%20education.png?tr=w-640,q-75,f-auto" alt="Nusa Education" class="h-10 md:h-12 w-auto">
                 </a>
             </div>
 
             <div class="hidden md:flex items-center space-x-6">
                 @foreach ($menus as $menu)
                     @if ($menu->children->isEmpty())
-                        <a href="{{ $menu->getUrl() }}" class="text-sm font-semibold text-gray-900 hover:text-blue-600">
+                        <a href="{{ $menu->getUrl() }}" class="text-sm font-semibold text-gray-900 hover:text-brand-primary transition">
                             {{ $menu->title }}
                         </a>
                     @else
                         <div class="relative group">
                             <button type="button"
-                                class="flex items-center gap-1 text-sm font-semibold text-gray-900 hover:text-blue-600">
+                                class="flex items-center gap-1 text-sm font-semibold text-gray-900 hover:text-brand-primary transition">
                                 {{ $menu->title }}
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                     class="h-4 w-4 text-gray-500">
@@ -70,7 +66,7 @@
             <div class="hidden md:flex items-center space-x-4">
                 <div class="relative">
                     <button type="button" id="navSearchToggle"
-                        class="p-2 rounded-full text-gray-700 hover:text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="p-2 rounded-full text-gray-700 hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-secondary transition"
                         aria-label="Cari artikel">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.5" class="h-6 w-6">
@@ -84,9 +80,8 @@
                         <form action="{{ route('posts.search') }}" method="GET" class="space-y-3">
                             <div class="flex items-center gap-2">
                                 <input type="text" name="q" placeholder="Cari artikel..." autocomplete="off"
-                                    class="flex-1 rounded-lg border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <button type="submit"
-                                    class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-white font-semibold hover:bg-blue-500">
+                                    class="flex-1 min-w-0 h-10 rounded-lg border-gray-200 shadow-sm focus:border-brand-primary focus:ring-brand-primary text-sm">
+                                <button type="submit" class="btn-primary h-10 !py-0 whitespace-nowrap">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="1.5" class="h-4 w-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"

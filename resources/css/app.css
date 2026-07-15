@@ -1,14 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap');
+
+@font-face {
+    font-family: 'Feature';
+    src: url('/font/FeatureDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Feature';
+    src: url('/font/FeatureDisplay-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .text-faux-medium {
+        text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor, 0 0.3px 0 currentColor, 0 -0.3px 0 currentColor;
+    }
+    .text-faux-semibold {
+        text-shadow: 0.5px 0 0 currentColor, -0.5px 0 0 currentColor, 0 0.5px 0 currentColor, 0 -0.5px 0 currentColor;
+    }
+}
+
 @layer components {
     .btn-primary {
-        @apply inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition;
+        @apply inline-flex items-center gap-2 rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 transition;
     }
 
     .btn-secondary {
-        @apply inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition;
+        @apply inline-flex items-center gap-2 rounded-lg bg-brand-secondary px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-secondary focus:ring-offset-2 transition;
+    }
+
+    .btn-accent {
+        @apply inline-flex items-center gap-2 rounded-lg bg-brand-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 transition;
     }
 
     .btn-danger {
@@ -32,10 +60,10 @@
     }
 
     .sidebar-link {
-        @apply flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition;
+        @apply flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg hover:bg-brand-secondary hover:text-brand-primary transition;
     }
 
     .sidebar-link-active {
-        @apply bg-blue-100 text-blue-600 font-semibold;
+        @apply bg-brand-primary text-white font-semibold;
     }
 }

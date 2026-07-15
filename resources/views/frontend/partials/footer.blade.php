@@ -12,18 +12,10 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div class="grid gap-10 lg:grid-cols-5">
             <div class="lg:col-span-2 space-y-4">
-                <div class="inline-flex items-center justify-center rounded-full bg-indigo-50 p-3">
-                    @if (optional($sidebarSetting)->site_logo_url)
-                        <img src="{{ $sidebarSetting->site_logo_url }}" alt="{{ config('app.name') }}" class="h-10 w-auto">
-                    @else
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-10 w-10 text-indigo-500">
-                            <path fill="currentColor"
-                                d="M8.98 5.17c-1.62 2.3-3.9 4.13-6.73 5.24c-.72.29-1.1 1.12-.83 1.86c.2.53.7.89 1.26.93c1.53.14 3.18.23 4.83.23c5.75 0 11.63-1 14.9-3.95c1.47-1.33 2.23-3.07 2.23-5.18V2.33c0-.83-.67-1.5-1.5-1.5c-.83 0-1.5.67-1.5 1.5v1c0 1.1-.34 2-.98 2.58c-2.3 2.08-7.55 3.2-13.68 3.2c-.88 0-1.75-.02-2.6-.07c1.76-.98 3.25-2.29 4.43-3.95c.48-.69.3-1.62-.39-2.1c-.69-.48-1.62-.3-2.1.39m14.05 11.66c-3.27 2.96-9.15 3.95-14.9 3.95c-1.65 0-3.3-.09-4.83-.23c-.56-.05-1.06.3-1.26.83c-.27.74.11 1.57.83 1.86c2.83 1.11 5.1 2.95 6.73 5.24c.3.43.77.66 1.26.66c.31 0 .62-.09.89-.27c.7-.48.87-1.41.39-2.1c-1.19-1.66-2.67-2.97-4.43-3.95c.85.05 1.72.07 2.6.07c6.13 0 11.38-1.12 13.68-3.2c.64-.58.98-1.48.98-2.58v-1c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v1c0 1.1-.34 2-.98 2.58" />
-                        </svg>
-                    @endif
+                <div class="inline-flex items-center">
+                    <img src="https://ik.imagekit.io/yqhp1cmbp/logo%20nusa%20education.png?tr=w-640,q-75,f-auto" alt="Nusa Education" class="h-16 w-auto">
                 </div>
                 @php
-                    $footerDescription = optional($sidebarSetting)->footer_description;
                     $footerSocials = array_filter([
                         'facebook' => optional($sidebarSetting)->footer_facebook_url,
                         'instagram' => optional($sidebarSetting)->footer_instagram_url,
@@ -32,8 +24,8 @@
                         'youtube' => optional($sidebarSetting)->footer_youtube_url,
                     ]);
                 @endphp
-                <p class="text-sm text-gray-600 max-w-md">
-                    {{ $footerDescription ?: config('app.name') . ' menghadirkan berita, tips, dan insight terbaru dunia crypto & blockchain.' }}
+                <p class="text-sm text-gray-600 max-w-md mt-4">
+                    Mewujudkan visi Anda menjadi realita melalui perpaduan strategi, inovasi teknologi, dan desain digital yang terukur.
                 </p>
                 @if (!empty($footerSocials))
                     <div class="flex items-center gap-4 text-gray-500">
