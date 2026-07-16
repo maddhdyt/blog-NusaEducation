@@ -4,116 +4,102 @@
 
 @section('content')
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="card p-6">
-            <div class="flex items-center justify-between">
+        <!-- Stat Card 1 (Peach) -->
+        <div class="bg-[#ffccb0] border border-[#0a1435] rounded-none p-6 group transition-transform hover:-translate-y-1">
+            <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Total Menus</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ $stats['menus'] }}</p>
-                </div>
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
-                        </path>
-                    </svg>
+                    <p class="text-[#0a1435] text-sm font-semibold tracking-wide uppercase mb-1">Total Menus</p>
+                    <p class="text-4xl font-heading text-[#0a1435]">{{ $stats['menus'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="card p-6">
-            <div class="flex items-center justify-between">
+        <!-- Stat Card 2 (Blue) -->
+        <div class="bg-[#b5dbff] border border-[#0a1435] rounded-none p-6 group transition-transform hover:-translate-y-1">
+            <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Total Pages</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ $stats['pages'] }}</p>
-                </div>
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
+                    <p class="text-[#0a1435] text-sm font-semibold tracking-wide uppercase mb-1">Total Pages</p>
+                    <p class="text-4xl font-heading text-[#0a1435]">{{ $stats['pages'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="card p-6">
-            <div class="flex items-center justify-between">
+        <!-- Stat Card 3 (Green) -->
+        <div class="bg-[#b4f3b4] border border-[#0a1435] rounded-none p-6 group transition-transform hover:-translate-y-1">
+            <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Categories</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ $stats['categories'] }}</p>
-                </div>
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
-                        </path>
-                    </svg>
+                    <p class="text-[#0a1435] text-sm font-semibold tracking-wide uppercase mb-1">Categories</p>
+                    <p class="text-4xl font-heading text-[#0a1435]">{{ $stats['categories'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="card p-6">
-            <div class="flex items-center justify-between">
+        <!-- Stat Card 4 (Yellow) -->
+        <div class="bg-[#ffe499] border border-[#0a1435] rounded-none p-6 group transition-transform hover:-translate-y-1">
+            <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Total Posts</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ $stats['posts'] }}</p>
-                    <p class="text-xs text-gray-500">{{ $stats['published_posts'] }} published, {{ $stats['draft_posts'] }}
-                        drafts</p>
-                </div>
-                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                        </path>
-                    </svg>
+                    <p class="text-[#0a1435] text-sm font-semibold tracking-wide uppercase mb-1">Total Posts</p>
+                    <p class="text-4xl font-heading text-[#0a1435]">{{ $stats['posts'] }}</p>
+                    <p class="text-xs font-semibold text-[#0a1435]/70 mt-1">{{ $stats['published_posts'] }} published &middot; {{ $stats['draft_posts'] }} drafts</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="p-6 border-b">
-            <h2 class="text-xl font-semibold">Recent Posts</h2>
+    <!-- Recent Posts Table -->
+    <div class="card bg-white mt-8">
+        <div class="px-6 py-5 border-b border-[#0a1435] flex items-center justify-between">
+            <h2 class="text-xl font-heading font-bold text-[#0a1435] tracking-tight">Postingan Terbaru</h2>
+            <a href="{{ route('admin.posts.index') }}" class="text-sm font-bold uppercase tracking-wider text-[#0a1435] hover:underline transition-colors">Lihat Semua &rarr;</a>
         </div>
-        <div class="p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="text-left py-3 px-4">Title</th>
-                            <th class="text-left py-3 px-4">Category</th>
-                            <th class="text-left py-3 px-4">Author</th>
-                            <th class="text-left py-3 px-4">Status</th>
-                            <th class="text-left py-3 px-4">Date</th>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-[#FDF6F0]">
+                        <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Judul Artikel</th>
+                        <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Kategori</th>
+                        <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Penulis</th>
+                        <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Status</th>
+                        <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435] text-right">Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#0a1435]/10">
+                    @forelse ($recentPosts as $post)
+                        <tr class="hover:bg-[#FDF6F0] transition-colors group">
+                            <td class="py-4 px-6">
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="font-bold text-[#0a1435] hover:underline transition-colors">
+                                    {{ $post->title }}
+                                </a>
+                            </td>
+                            <td class="py-4 px-6 text-sm text-[#0a1435]">
+                                <span class="inline-flex items-center px-2 py-1 border border-[#0a1435] bg-white text-xs font-bold uppercase">
+                                    {{ $post->category->name }}
+                                </span>
+                            </td>
+                            <td class="py-4 px-6 text-sm text-[#0a1435] font-semibold">{{ $post->user->name }}</td>
+                            <td class="py-4 px-6">
+                                @if ($post->status === 'published')
+                                    <span class="inline-flex items-center px-2 py-1 border border-[#0a1435] bg-[#b4f3b4] text-[#0a1435] text-xs font-bold uppercase">
+                                        Published
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2 py-1 border border-[#0a1435] bg-[#ffe499] text-[#0a1435] text-xs font-bold uppercase">
+                                        Draft
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="py-4 px-6 text-sm font-semibold text-[#0a1435] text-right">{{ $post->created_at->format('d M, Y') }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($recentPosts as $post)
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="py-3 px-4">
-                                    <a href="{{ route('admin.posts.edit', $post) }}"
-                                        class="text-blue-600 hover:text-blue-800">
-                                        {{ $post->title }}
-                                    </a>
-                                </td>
-                                <td class="py-3 px-4">{{ $post->category->name }}</td>
-                                <td class="py-3 px-4">{{ $post->user->name }}</td>
-                                <td class="py-3 px-4">
-                                    @if ($post->status === 'published')
-                                        <span class="px-2 py-1 bg-green-100 text-green-600 rounded text-sm">Published</span>
-                                    @else
-                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded text-sm">Draft</span>
-                                    @endif
-                                </td>
-                                <td class="py-3 px-4">{{ $post->created_at->format('M d, Y') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="py-8 text-center text-gray-500">No posts yet</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="py-12 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                                <p class="mt-4 text-sm font-medium text-gray-500">Belum ada postingan</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection

@@ -7,7 +7,7 @@
         @endphp
         <!-- Editorial Hero Section -->
         <div class="pt-10 pb-16">
-            <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-24">
+            <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
                 
                 <!-- Main Blog Header (Jasper Style) -->
                 <div class="text-center w-full mx-auto mb-16 pt-4 sm:pt-8 px-4">
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-16 space-y-16">
+        <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-16 space-y-16">
 
             {{-- Latest grid (Full width now, no sidebar) --}}
             <section id="terbaru" class="space-y-6">
@@ -132,14 +132,14 @@
 
             {{-- Gallery preview --}}
             <section class="space-y-6">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between pb-4 border-b border-gray-200">
                     <div>
-                        <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide">Galeri</p>
-                        <h2 class="text-2xl font-semibold text-gray-900">Momen Terbaru</h2>
-                        <p class="text-sm text-gray-600">Klik foto untuk melihat ukuran penuh.</p>
+                        <p class="text-[13px] font-bold text-gray-500 uppercase tracking-widest font-mono mb-2">Galeri</p>
+                        <h2 class="text-3xl font-normal text-faux-semibold text-gray-900 font-heading mb-1">Momen Terbaru</h2>
+                        <p class="text-[15px] text-gray-600">Klik foto untuk melihat ukuran penuh.</p>
                     </div>
                     <a href="{{ route('gallery.index') }}"
-                        class="text-sm font-semibold text-blue-600 hover:text-blue-700">Lihat semua</a>
+                        class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-[#0a1435] border border-[#0a1435] hover:bg-[#0a1435] hover:text-white transition-colors duration-200">Lihat semua</a>
                 </div>
 
                 @if ($galleryItems->isEmpty())
@@ -149,21 +149,19 @@
                         @foreach ($galleryItems as $item)
                             <button type="button" data-title="{{ $item->title }}"
                                 data-description="{{ $item->description }}" data-image="{{ $item->image_url }}"
-                                class="group relative h-80 overflow-hidden rounded-3xl bg-black shadow-lg ring-1 ring-black/10">
+                                class="group relative h-80 overflow-hidden bg-black">
                                 <img src="{{ $item->image_url }}" alt="{{ $item->title }}"
-                                    class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                    class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
                                     loading="lazy">
-                                <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-black/35 to-black/85">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a1435]/90 via-[#0a1435]/20 to-transparent">
                                 </div>
-                                <div class="relative flex h-full flex-col justify-end p-5 space-y-2 text-white">
-                                    <div class="flex items-center gap-3 text-xs text-white/80">
+                                <div class="relative flex h-full flex-col justify-end p-6 text-white text-left">
+                                    <div class="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest font-mono text-white/80 mb-3">
                                         <span>{{ optional($item->created_at)->translatedFormat('M d, Y') }}</span>
-                                        <span class="h-1 w-1 rounded-full bg-white/70"></span>
-                                        <span>Galeri</span>
                                     </div>
-                                    <h3 class="text-lg font-semibold leading-tight drop-shadow">{{ $item->title }}</h3>
+                                    <h3 class="text-xl sm:text-2xl font-normal text-faux-medium font-heading leading-tight">{{ $item->title }}</h3>
                                     @if ($item->description)
-                                        <p class="text-sm text-white/90 line-clamp-2">{{ $item->description }}</p>
+                                        <p class="text-sm text-white/80 mt-2 line-clamp-2">{{ $item->description }}</p>
                                     @endif
                                 </div>
                             </button>
@@ -173,62 +171,65 @@
             </section>
 
             {{-- Newsletter + trending list --}}
-            <section class="grid gap-6 lg:grid-cols-3">
-                <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-900">Berlangganan buletin</h3>
-                    <p class="mt-2 text-sm text-gray-600">Ingin dapat notifikasi artikel terbaru? Tulis nama dan email
-                        kamu lalu tekan Subscribe.</p>
+            <section class="grid gap-8 lg:grid-cols-3">
+                <div class="bg-white p-8 border border-[#e2d5cf] shadow-sm">
+                    <h3 class="text-2xl font-normal text-faux-medium text-[#0a1435] font-heading">Berlangganan Buletin</h3>
+                    <p class="mt-4 text-[15px] text-[#6b5b59] leading-relaxed">Dapatkan wawasan terbaru dan notifikasi artikel langsung di kotak masuk Anda.</p>
 
-                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="mt-4 space-y-3">
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="mt-6 space-y-4">
                         @csrf
-                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama"
-                            class="form-input @error('name') border-red-500 @enderror">
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"
-                            class="form-input @error('email') border-red-500 @enderror" required>
+                        <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Lengkap"
+                            class="w-full px-4 py-3 bg-[#FDF6F0] border border-transparent focus:border-[#0a1435] focus:bg-white focus:ring-0 transition-colors text-sm @error('name') border-red-500 @enderror">
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Alamat Email"
+                            class="w-full px-4 py-3 bg-[#FDF6F0] border border-transparent focus:border-[#0a1435] focus:bg-white focus:ring-0 transition-colors text-sm @error('email') border-red-500 @enderror" required>
                         @error('email')
                             <p class="text-xs text-red-600">{{ $message }}</p>
                         @enderror
-                        <button type="submit" class="btn-primary w-full justify-center">Subscribe</button>
+                        <button type="submit" class="w-full px-6 py-3.5 text-sm font-bold tracking-widest text-white uppercase bg-[#0a1435] hover:bg-black transition-colors font-mono">
+                            Berlangganan
+                        </button>
                     </form>
-                    <p class="mt-3 text-xs text-gray-500">Kami tidak mengirim spam. Bisa berhenti langganan kapan saja.</p>
+                    <p class="mt-4 text-[13px] text-gray-400">Kami menjaga privasi Anda. Berhenti kapan saja.</p>
                     <div id="newsletter-toast"
-                        class="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 transform rounded-xl bg-gray-900 text-white px-4 py-3 shadow-2xl ring-1 ring-black/10 opacity-0 translate-y-3 transition duration-300"
+                        class="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 transform bg-[#0a1435] text-white px-6 py-4 shadow-2xl opacity-0 translate-y-3 transition duration-300 font-mono text-sm tracking-wide"
                         style="z-index:60;">
-                        <span class="text-sm font-semibold">Terima kasih! Notifikasi artikel terbaru akan dikirim ke email
-                            kamu.</span>
+                        <span>Terima kasih! Notifikasi artikel terbaru akan dikirim ke email kamu.</span>
                     </div>
                 </div>
 
-                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-900">
-                            {{ optional($sidebar)->trending_title ?? 'Sedang Tren' }}</h3>
+                <div class="lg:col-span-2 bg-white p-8 border border-[#e2d5cf] shadow-sm flex flex-col">
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
+                        <h3 class="text-2xl font-normal text-faux-medium text-[#0a1435] font-heading">
+                            {{ optional($sidebar)->trending_title ?? 'Sedang Tren' }}
+                        </h3>
                         @if (optional($sidebar)->trending_link_url && optional($sidebar)->trending_link_text)
                             <a href="{{ optional($sidebar)->trending_link_url }}"
-                                class="text-sm font-semibold text-blue-600 hover:text-blue-700">{{ optional($sidebar)->trending_link_text }}</a>
+                                class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-[#0a1435] border border-[#0a1435] hover:bg-[#0a1435] hover:text-white transition-colors duration-200">{{ optional($sidebar)->trending_link_text }}</a>
                         @else
                             <a href="{{ route('posts.index') }}"
-                                class="text-sm font-semibold text-blue-600 hover:text-blue-700">Lihat semua</a>
+                                class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-[#0a1435] border border-[#0a1435] hover:bg-[#0a1435] hover:text-white transition-colors duration-200">Lihat semua</a>
                         @endif
                     </div>
-                    <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    
+                    <div class="grid gap-6 md:grid-cols-2 flex-1">
                         @forelse ($trendingPosts as $post)
                             @php
                                 $image = $post->thumbnail_url ?? $placeholder;
                             @endphp
-                            <article
-                                class="flex gap-4 rounded-xl border border-gray-100 p-4 hover:border-blue-200 hover:bg-blue-50/60 transition">
-                                <img src="{{ $image }}" alt="{{ $post->title }}"
-                                    class="h-20 w-24 rounded-lg object-cover">
+                            <article class="flex gap-5 group items-start pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                                <a href="{{ route('posts.show', $post->slug) }}" class="block shrink-0 overflow-hidden w-28 aspect-[4/3]">
+                                    <img src="{{ $image }}" alt="{{ $post->title }}"
+                                        class="h-full w-full object-cover group-hover:scale-105 transition duration-700">
+                                </a>
                                 <div class="flex flex-1 flex-col">
-                                    <span
-                                        class="text-xs font-semibold text-blue-600">{{ $post->category->name ?? 'Umum' }}</span>
-                                    <h4 class="text-base font-semibold text-gray-900 leading-5 line-clamp-2 mt-1">
-                                        <a href="{{ route('posts.show', $post->slug) }}"
-                                            class="hover:text-blue-600">{{ $post->title }}</a>
+                                    <div class="inline-flex items-center gap-1.5 text-[11px] text-[#735A56] font-mono mb-2 uppercase tracking-widest">
+                                        <span>{{ $post->category->name ?? 'Umum' }}</span>
+                                    </div>
+                                    <h4 class="text-[17px] font-normal text-faux-medium leading-snug text-[#0a1435] font-heading group-hover:text-brand-primary transition">
+                                        <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
                                     </h4>
-                                    <p class="mt-2 text-xs text-gray-600 line-clamp-2">
-                                        {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 80) }}
+                                    <p class="mt-2 text-[13px] text-[#6b5b59] line-clamp-2 leading-relaxed">
+                                        {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 70) }}
                                     </p>
                                 </div>
                             </article>

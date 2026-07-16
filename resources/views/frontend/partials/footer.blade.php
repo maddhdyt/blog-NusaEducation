@@ -8,12 +8,12 @@
     $footerPosts = \App\Models\Post::published()->with('category')->latest('published_at')->limit(4)->get();
 @endphp
 
-<footer class="bg-white text-gray-700 mt-20">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <div class="grid gap-10 lg:grid-cols-5">
-            <div class="lg:col-span-2 space-y-4">
+<footer class="bg-[#FDF6F0] text-[#6b5b59] border-t border-[#e2d5cf] pt-12 mt-12 lg:mt-0">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-16">
+        <div class="grid gap-12 lg:grid-cols-12">
+            <div class="lg:col-span-4 space-y-6">
                 <div class="inline-flex items-center">
-                    <img src="https://ik.imagekit.io/yqhp1cmbp/logo%20nusa%20education.png?tr=w-640,q-75,f-auto" alt="Nusa Education" class="h-16 w-auto">
+                    <img src="https://ik.imagekit.io/yqhp1cmbp/logo%20nusa%20education.png?tr=w-640,q-75,f-auto" alt="Nusa Education" class="h-16 w-auto mix-blend-multiply">
                 </div>
                 @php
                     $footerSocials = array_filter([
@@ -24,14 +24,14 @@
                         'youtube' => optional($sidebarSetting)->footer_youtube_url,
                     ]);
                 @endphp
-                <p class="text-sm text-gray-600 max-w-md mt-4">
+                <p class="text-[15px] text-[#6b5b59] max-w-md mt-4 leading-relaxed">
                     Mewujudkan visi Anda menjadi realita melalui perpaduan strategi, inovasi teknologi, dan desain digital yang terukur.
                 </p>
                 @if (!empty($footerSocials))
-                    <div class="flex items-center gap-4 text-gray-500">
+                    <div class="flex items-center gap-5 text-[#0a1435]">
                         @if (!empty($footerSocials['facebook']))
                             <a href="{{ $footerSocials['facebook'] }}" aria-label="Facebook"
-                                class="hover:text-gray-700 transition" target="_blank" rel="noreferrer">
+                                class="hover:text-brand-primary transition" target="_blank" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5"
                                     fill="currentColor">
                                     <path
@@ -41,7 +41,7 @@
                         @endif
                         @if (!empty($footerSocials['instagram']))
                             <a href="{{ $footerSocials['instagram'] }}" aria-label="Instagram"
-                                class="hover:text-gray-700 transition" target="_blank" rel="noreferrer">
+                                class="hover:text-brand-primary transition" target="_blank" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5"
                                     fill="currentColor">
                                     <path
@@ -50,7 +50,7 @@
                             </a>
                         @endif
                         @if (!empty($footerSocials['x']))
-                            <a href="{{ $footerSocials['x'] }}" aria-label="X" class="hover:text-gray-700 transition"
+                            <a href="{{ $footerSocials['x'] }}" aria-label="X" class="hover:text-brand-primary transition"
                                 target="_blank" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5"
                                     fill="currentColor">
@@ -60,7 +60,7 @@
                         @endif
                         @if (!empty($footerSocials['github']))
                             <a href="{{ $footerSocials['github'] }}" aria-label="GitHub"
-                                class="hover:text-gray-700 transition" target="_blank" rel="noreferrer">
+                                class="hover:text-brand-primary transition" target="_blank" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5"
                                     fill="currentColor">
                                     <path
@@ -70,7 +70,7 @@
                         @endif
                         @if (!empty($footerSocials['youtube']))
                             <a href="{{ $footerSocials['youtube'] }}" aria-label="YouTube"
-                                class="hover:text-gray-700 transition" target="_blank" rel="noreferrer">
+                                class="hover:text-brand-primary transition" target="_blank" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5"
                                     fill="currentColor">
                                     <path
@@ -82,12 +82,12 @@
                 @endif
             </div>
 
-            <div class="space-y-3">
-                <h4 class="text-base font-semibold text-gray-900">Navigasi</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
+            <div class="lg:col-span-2 space-y-6">
+                <h4 class="text-xl font-normal text-faux-medium text-[#0a1435] font-heading">Navigasi</h4>
+                <ul class="space-y-4 text-[15px] text-[#6b5b59]">
                     @forelse ($footerMenus as $menu)
                         <li>
-                            <a class="hover:text-gray-900" href="{{ $menu->getUrl() }}">{{ $menu->title }}</a>
+                            <a class="hover:text-brand-primary transition" href="{{ $menu->getUrl() }}">{{ $menu->title }}</a>
                         </li>
                     @empty
                         <li class="text-gray-500">Belum ada menu aktif.</li>
@@ -95,14 +95,14 @@
                 </ul>
             </div>
 
-            <div class="space-y-3">
-                <h4 class="text-base font-semibold text-gray-900">Kategori Populer</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
+            <div class="lg:col-span-3 space-y-6">
+                <h4 class="text-xl font-normal text-faux-medium text-[#0a1435] font-heading">Kategori Populer</h4>
+                <ul class="space-y-0 text-[15px] text-[#6b5b59]">
                     @forelse ($footerCategories as $category)
-                        <li class="flex items-center justify-between gap-2">
-                            <a class="hover:text-gray-900"
+                        <li class="flex items-center justify-between gap-4 border-b border-[#e2d5cf] py-3 first:pt-0 last:border-0 last:pb-0">
+                            <a class="hover:text-brand-primary transition line-clamp-1"
                                 href="{{ route('categories.show', $category->slug) }}">{{ $category->name }}</a>
-                            <span class="text-xs text-gray-500">{{ $category->published_posts_count }} artikel</span>
+                            <span class="text-[12px] text-[#735A56] font-mono whitespace-nowrap">{{ $category->published_posts_count }} artikel</span>
                         </li>
                     @empty
                         <li class="text-gray-500">Belum ada kategori.</li>
@@ -110,15 +110,15 @@
                 </ul>
             </div>
 
-            <div class="space-y-3">
-                <h4 class="text-base font-semibold text-gray-900">Rilisan Terbaru</h4>
-                <ul class="space-y-3 text-sm text-gray-700">
+            <div class="lg:col-span-3 space-y-6">
+                <h4 class="text-xl font-normal text-faux-medium text-[#0a1435] font-heading">Rilisan Terbaru</h4>
+                <ul class="space-y-0 text-sm text-gray-700">
                     @forelse ($footerPosts as $post)
-                        <li class="flex flex-col">
-                            <a class="font-semibold text-gray-900 hover:text-blue-600"
+                        <li class="flex flex-col gap-2 border-b border-[#e2d5cf] py-4 first:pt-0 last:border-0 last:pb-0">
+                            <a class="text-[15px] font-normal text-faux-medium text-[#0a1435] font-heading hover:text-brand-primary transition leading-snug"
                                 href="{{ route('posts.show', $post->slug) }}">{{ \Illuminate\Support\Str::limit($post->title, 60) }}</a>
-                            <div class="flex items-center gap-2 text-xs text-gray-500">
-                                <span class="font-semibold text-blue-600">{{ $post->category->name ?? 'Umum' }}</span>
+                            <div class="inline-flex items-center gap-1.5 text-[11px] text-[#735A56] font-mono tracking-widest uppercase mt-0.5">
+                                <span>{{ $post->category->name ?? 'Umum' }}</span>
                                 <span>&middot;</span>
                                 <time
                                     datetime="{{ optional($post->published_at ?? $post->created_at)->toDateString() }}">
@@ -127,15 +127,15 @@
                             </div>
                         </li>
                     @empty
-                        <li class="text-gray-500">Belum ada artikel.</li>
+                        <li class="text-gray-500 py-4 first:pt-0">Belum ada artikel.</li>
                     @endforelse
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 text-sm text-gray-500">
+    <div class="border-t border-[#e2d5cf]">
+        <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-8 text-sm text-[#735A56] font-mono tracking-wide text-center lg:text-left">
             <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
         </div>
     </div>

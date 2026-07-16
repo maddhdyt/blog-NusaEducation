@@ -2,237 +2,111 @@
 
 @section('content')
     @php
-        $featured = $posts->take(1);
-        $secondary = $posts->skip(1)->take(3);
-        $rest = $posts->skip(4);
+        $searchQuery = $searchQuery ?? request('q', '');
+        $hasQuery = $searchQuery !== '';
     @endphp
 
-    <div class="bg-gray-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 space-y-12">
-            <header class="space-y-4">
-                @php
-                    $searchQuery = $searchQuery ?? '';
-                    $hasQuery = $searchQuery !== '';
-                @endphp
-
-                @if ($hasQuery)
-                    <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide">Hasil pencarian</p>
-                    <div class="flex items-center gap-3 flex-wrap">
-                        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">"{{ $searchQuery }}"</h1>
-                        <span
-                            class="text-sm font-semibold text-gray-600 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full">
-                            {{ $posts->total() }} artikel
-                        </span>
-                    </div>
-                    <form action="{{ route('posts.search') }}" method="GET" class="mt-2">
-                        <div class="flex items-center gap-3">
-                            <input type="text" name="q" value="{{ $searchQuery }}" placeholder="Cari artikel..."
-                                class="w-full sm:w-96 rounded-lg border-gray-200 shadow-sm focus:border-indigo-400 focus:ring-indigo-400">
-                            <button type="submit"
-                                class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white font-semibold hover:bg-indigo-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.5" class="h-5 w-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 5 5a7.5 7.5 0 0 0 11.65 11.65Z" />
-                                </svg>
-                                Cari
-                            </button>
-                        </div>
-                    </form>
-                @else
-                    <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide">Blog & Insights</p>
-                    <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">Artikel terbaru</h1>
-                    <p class="text-lg text-gray-600 max-w-3xl">Kumpulan update, tips, dan insight seputar topik terbaru.
-                        Semua
-                        konten ditarik dinamis dari database.</p>
-                @endif
-            </header>
-
-            @if ($featured->isNotEmpty())
-                <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    @php($main = $featured->first())
-                    <article
-                        class="lg:col-span-2 relative overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-100">
-                        <div class="aspect-[16/9] overflow-hidden">
-                            @if ($main->thumbnail)
-                                <img src="{{ $main->thumbnail_url }}" alt="{{ $main->title }}"
-                                    class="h-full w-full object-cover">
+    <div class="bg-[#FDF6F0] min-h-screen py-16 lg:py-24">
+        <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+                
+                {{-- Left Sidebar --}}
+                <aside class="lg:col-span-3 space-y-12">
+                    <div>
+                        <h1 class="text-4xl lg:text-5xl font-normal text-faux-medium text-[#0a1435] font-heading leading-tight mb-8">
+                            @if ($hasQuery)
+                                Pencarian
                             @else
-                                <div class="h-full w-full bg-gradient-to-br from-indigo-500 to-purple-500"></div>
+                                Semua Artikel
                             @endif
-                        </div>
-                        <div class="p-6 sm:p-8 space-y-4">
-                            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                                @if (!empty($main->category))
-                                    <a href="{{ route('categories.show', $main->category->slug) }}"
-                                        class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 font-semibold text-indigo-700 hover:bg-indigo-100">
-                                        {{ $main->category->name }}
-                                    </a>
-                                @endif
-                                <span>{{ optional($main->published_at ?? $main->created_at)->translatedFormat('d M Y') }}</span>
-                                <span class="text-gray-300">•</span>
-                                <span>Oleh {{ $main->user->name ?? 'Admin' }}</span>
+                        </h1>
+                        
+                        <form action="{{ route('posts.search') }}" method="GET" class="space-y-4">
+                            <div class="relative">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0a1435]/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105 5a7.5 7.5 0 0011.65 11.65z" />
+                                </svg>
+                                <input type="text" name="q" value="{{ $searchQuery }}" placeholder="Cari artikel..."
+                                    class="w-full h-12 bg-white border border-[#e2d5cf] pl-10 pr-4 font-mono text-[13px] text-[#0a1435] focus:outline-none focus:border-brand-primary placeholder:text-[#0a1435]/50 rounded-none shadow-sm">
                             </div>
-                            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-                                <a href="{{ route('posts.show', $main->slug) }}" class="hover:text-indigo-700">
-                                    {{ $main->title }}
+                            
+                            @if ($hasQuery)
+                                <a href="{{ route('posts.index') }}" class="w-full h-12 flex items-center justify-center bg-brand-primary text-[#FDF6F0] font-mono text-[13px] font-bold uppercase tracking-widest hover:bg-[#0a1435] transition-colors border border-transparent">
+                                    Hapus Filter
                                 </a>
-                            </h2>
-                            @if ($main->excerpt)
-                                <p class="text-lg text-gray-600">{{ Str::limit($main->excerpt, 170) }}</p>
                             @endif
-                            <div class="flex items-center gap-3">
-                                <img src="{{ $main->user->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($main->user->name ?? 'Author') . '&background=4338ca&color=fff' }}"
-                                    alt="{{ $main->user->name ?? 'Author' }}"
-                                    class="h-10 w-10 rounded-full bg-indigo-50" />
-                                <div class="text-sm text-gray-600">
-                                    <p class="font-semibold text-gray-900">{{ $main->user->name ?? 'Author' }}</p>
-                                    <p>{{ $main->user->role ?? 'Contributor' }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-5">
-                        @foreach ($secondary as $side)
-                            <article class="flex gap-4 rounded-2xl bg-white shadow ring-1 ring-gray-100 overflow-hidden">
-                                <div class="w-32 shrink-0 overflow-hidden">
-                                    @if ($side->thumbnail)
-                                        <img src="{{ $side->thumbnail_url }}" alt="{{ $side->title }}"
-                                            class="h-full w-full object-cover">
-                                    @else
-                                        <div class="h-full w-full bg-gradient-to-br from-indigo-400 to-purple-500"></div>
-                                    @endif
-                                </div>
-                                <div class="p-4 space-y-2 flex-1">
-                                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                                        <span>{{ optional($side->published_at ?? $side->created_at)->translatedFormat('d M Y') }}</span>
-                                        <span class="text-gray-300">•</span>
-                                        <span>{{ $side->user->name ?? 'Admin' }}</span>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-900 leading-snug">
-                                        <a href="{{ route('posts.show', $side->slug) }}" class="hover:text-indigo-700">
-                                            {{ Str::limit($side->title, 80) }}
-                                        </a>
-                                    </h3>
-                                    <p class="text-sm text-gray-600 line-clamp-2">
-                                        {{ Str::limit($side->excerpt ?: strip_tags($side->content ?? ''), 100) }}
-                                    </p>
-                                </div>
-                            </article>
-                        @endforeach
+                        </form>
                     </div>
-                </section>
-            @endif
 
-            <section class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div class="lg:col-span-3 space-y-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @forelse ($rest as $post)
-                            <article
-                                class="relative overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 hover:shadow-lg transition">
-                                <div class="aspect-[4/3] overflow-hidden">
+                    {{-- Newsletter / Community Widget --}}
+                    <div class="bg-white shadow-sm border border-[#e2d5cf] p-8">
+                        <h3 class="text-2xl font-heading text-[#0a1435] leading-tight mb-4">Bergabung dengan komunitas kami</h3>
+                        <p class="text-sm text-[#6b5b59] mb-6 leading-relaxed">
+                            Temukan tips, insight, dan panduan belajar terbaru langsung dari para ahli di Nusa Education.
+                        </p>
+                        <a href="#" class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-brand-primary font-mono hover:text-[#0a1435] transition-colors">
+                            Langganan <span aria-hidden="true" class="text-lg leading-none">&rarr;</span>
+                        </a>
+                    </div>
+                </aside>
+
+                {{-- Right Content (Post Grid) --}}
+                <div class="lg:col-span-9">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
+                        @forelse ($posts as $post)
+                            <article class="flex flex-col group h-full shadow-sm">
+                                <a href="{{ route('posts.show', $post->slug) }}" class="block w-full aspect-[4/3] overflow-hidden bg-[#0a1435] relative">
                                     @if ($post->thumbnail)
                                         <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}"
-                                            class="h-full w-full object-cover">
+                                            class="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100">
                                     @else
-                                        <div class="h-full w-full bg-gradient-to-br from-indigo-500 to-purple-500"></div>
+                                        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                                            <span class="text-[5rem] font-bold text-[#FDF6F0] font-heading">{{ Str::upper(Str::substr($post->title, 0, 1)) }}</span>
+                                        </div>
                                     @endif
-                                </div>
-                                <div class="p-4 space-y-3">
-                                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                                        @if (!empty($post->category))
-                                            <a href="{{ route('categories.show', $post->category->slug) }}"
-                                                class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-1 font-semibold text-indigo-700 hover:bg-indigo-100">
-                                                {{ $post->category->name }}
-                                            </a>
-                                        @endif
-                                        <span>{{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}</span>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-900 leading-snug">
-                                        <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-indigo-700">
-                                            {{ Str::limit($post->title, 90) }}
+                                </a>
+                                
+                                <div class="flex-1 flex flex-col bg-white p-6 lg:p-8 border-x border-b border-[#e2d5cf]/50">
+                                    <h2 class="text-2xl lg:text-3xl font-normal text-faux-medium font-heading text-[#0a1435] leading-snug group-hover:text-brand-primary transition-colors mb-3">
+                                        <a href="{{ route('posts.show', $post->slug) }}">
+                                            {{ Str::limit($post->title, 70) }}
                                         </a>
-                                    </h3>
-                                    <p class="text-sm text-gray-600 line-clamp-3">
-                                        {{ Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 130) }}
+                                    </h2>
+                                    <p class="text-sm text-[#433836] line-clamp-3 leading-relaxed mb-6">
+                                        {{ Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 150) }}
                                     </p>
-                                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <div class="mt-auto flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.2em] text-[#6b5b59]">
+                                        <span>{{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}</span>
+                                        <span class="text-[#e2d5cf]">|</span>
                                         <span>{{ $post->user->name ?? 'Admin' }}</span>
-                                        <span class="text-gray-300">•</span>
-                                        <span>Read more →</span>
                                     </div>
                                 </div>
                             </article>
                         @empty
-                            <div
-                                class="col-span-full text-center py-12 bg-white rounded-2xl shadow-sm ring-1 ring-gray-100">
+                            <div class="col-span-full py-24 text-center bg-white shadow-sm border border-[#e2d5cf]">
                                 @if ($hasQuery)
-                                    <p class="text-gray-900 text-lg font-semibold">Tidak ada hasil untuk
-                                        "{{ $searchQuery }}"</p>
-                                    <p class="text-gray-500 mt-2">Coba kata kunci lain atau telusuri semua artikel.</p>
-                                    <a href="{{ route('posts.index') }}"
-                                        class="inline-flex items-center gap-2 mt-4 text-indigo-600 font-semibold">
+                                    <p class="text-4xl font-heading text-[#0a1435]">Tidak ada hasil untuk "{{ $searchQuery }}"</p>
+                                    <p class="text-[#6b5b59] mt-4 font-mono text-[11px] uppercase tracking-widest">Coba kata kunci lain.</p>
+                                    <a href="{{ route('posts.index') }}" class="inline-flex items-center justify-center mt-8 px-6 py-3 bg-[#0a1435] text-[#FDF6F0] text-[11px] font-bold uppercase tracking-widest font-mono hover:bg-brand-primary transition-colors">
                                         Lihat semua artikel
-                                        <span aria-hidden="true">→</span>
                                     </a>
                                 @else
-                                    <p class="text-gray-500 text-lg">Belum ada artikel.</p>
+                                    <p class="text-4xl font-heading text-[#0a1435]">Belum ada artikel.</p>
                                 @endif
                             </div>
                         @endforelse
                     </div>
 
-                    <div class="pt-2">
-                        {{ $posts->links() }}
-                    </div>
-                </div>
-
-                <aside class="space-y-6">
-                    <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 p-5">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-indigo-600">Newsletter</p>
-                        <h3 class="text-lg font-bold text-gray-900 mt-2">Dapatkan update terbaru</h3>
-                        <p class="text-sm text-gray-600 mt-1">Langganan untuk menerima highlight artikel.</p>
-                        <form class="mt-4 space-y-3">
-                            <input type="email" name="email" placeholder="Email kamu"
-                                class="w-full rounded-lg border-gray-200 shadow-sm focus:border-indigo-400 focus:ring-indigo-400">
-                            <button type="button"
-                                class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-white font-semibold hover:bg-indigo-500">
-                                Langganan
-                            </button>
-                        </form>
-                    </div>
-
-                    @if ($secondary->isNotEmpty())
-                        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 p-5 space-y-4">
-                            <div class="flex items-center justify-between">
-                                <p class="text-sm font-semibold text-gray-900">Sorotan</p>
-                                <span class="text-xs text-indigo-600 font-semibold">Pilihan</span>
-                            </div>
-                            <div class="space-y-4">
-                                @foreach ($secondary as $hot)
-                                    <a href="{{ route('posts.show', $hot->slug) }}" class="flex gap-3 group">
-                                        <div class="h-16 w-20 overflow-hidden rounded-lg bg-indigo-50">
-                                            @if ($hot->thumbnail)
-                                                <img src="{{ $hot->thumbnail_url }}" alt="{{ $hot->title }}"
-                                                    class="h-full w-full object-cover">
-                                            @endif
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="text-xs text-gray-500">
-                                                {{ optional($hot->published_at ?? $hot->created_at)->translatedFormat('d M Y') }}
-                                            </p>
-                                            <p class="text-sm font-semibold text-gray-900 group-hover:text-indigo-700">
-                                                {{ Str::limit($hot->title, 80) }}
-                                            </p>
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
+                    {{-- Pagination --}}
+                    @if ($posts->hasPages())
+                        <div class="pt-16 mt-8 border-t border-[#e2d5cf]">
+                            {{ $posts->links() }}
                         </div>
                     @endif
-                </aside>
-            </section>
+                </div>
+
+            </div>
         </div>
     </div>
 @endsection

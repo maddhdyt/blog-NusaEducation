@@ -3,148 +3,154 @@
 @section('content')
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
     <style>
+        .quill-content {
+            color: #433836;
+            font-size: 1.25rem; /* 20px for better readability */
+            line-height: 1.8;
+        }
         .quill-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 0.5rem;
-            margin: 1.25rem 0;
+            border-radius: 0;
+            margin: 3rem 0;
+            border: 1px solid #e2d5cf;
         }
-
         .quill-content iframe {
             width: 100%;
-            min-height: 320px;
-            border-radius: 0.75rem;
+            min-height: 400px;
+            margin: 3rem 0;
         }
-
         .quill-content a {
-            color: #2563eb;
-            text-decoration: none;
+            color: #0a1435;
+            text-decoration: underline;
+            text-underline-offset: 4px;
             font-weight: 600;
         }
-
         .quill-content a:hover {
-            text-decoration: underline;
+            color: #1786F8;
         }
-
-        .quill-content .ql-align-center {
-            text-align: center;
+        .quill-content h2, .quill-content h3, .quill-content h4 {
+            color: #0a1435;
+            font-family: 'Feature', serif;
+            font-weight: 500;
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
         }
-
-        .quill-content .ql-align-right {
-            text-align: right;
-        }
-
-        .quill-content .ql-align-justify {
-            text-align: justify;
-        }
-
+        .quill-content h2 { font-size: 2.5rem; }
+        .quill-content h3 { font-size: 1.875rem; }
         .quill-content ul {
             list-style: disc;
             padding-left: 1.5rem;
+            margin: 1.5rem 0;
         }
-
         .quill-content ol {
             list-style: decimal;
             padding-left: 1.5rem;
+            margin: 1.5rem 0;
         }
-
         .quill-content blockquote {
-            border-left: 4px solid #e5e7eb;
-            padding-left: 1rem;
-            color: #4b5563;
+            border-left: 4px solid #0a1435;
+            padding-left: 2rem;
+            margin: 2.5rem 0;
+            color: #6b5b59;
+            font-style: italic;
+            font-size: 1.5rem;
+            line-height: 1.6;
         }
-
         .quill-content pre {
-            background: #0f172a;
-            color: #e2e8f0;
-            padding: 1rem;
-            border-radius: 0.75rem;
+            background: #0a1435;
+            color: #FDF6F0;
+            padding: 1.5rem;
+            border-radius: 0;
             overflow: auto;
+            margin: 2rem 0;
+            font-family: monospace;
+            font-size: 1rem;
         }
     </style>
-    <div class="bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-            <div class="flex flex-col lg:flex-row gap-10 lg:gap-16">
-                <article class="lg:flex-1">
-                    <nav class="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-6">
-                        <a href="{{ route('home') }}" class="hover:text-indigo-600">Home</a>
-                        <span class="text-gray-300">/</span>
+
+    <div class="bg-[#FDF6F0]">
+        <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-12 lg:py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-0">
+                
+                <!-- Main Article Column -->
+                <article class="lg:col-span-8 xl:col-span-9 lg:pr-12 xl:pr-20">
+                    <nav class="flex flex-wrap items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#735A56] mb-10">
+                        <a href="{{ route('home') }}" class="hover:text-[#0a1435] transition">Home</a>
+                        <span>/</span>
                         @if (!empty($post->category))
                             <a href="{{ route('categories.show', $post->category->slug) }}"
-                                class="hover:text-indigo-600">{{ $post->category->name }}</a>
-                            <span class="text-gray-300">/</span>
+                                class="hover:text-[#0a1435] transition">{{ $post->category->name }}</a>
+                            <span>/</span>
                         @endif
-                        <span class="font-medium text-gray-900">{{ $post->title }}</span>
+                        <span class="font-bold text-[#0a1435]">{{ $post->title }}</span>
                     </nav>
 
-                    <div class="space-y-6">
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
+                    <div class="space-y-8 max-w-[900px]">
+                        <h1 class="text-4xl sm:text-5xl lg:text-[4rem] font-normal text-faux-medium leading-[1.1] text-[#0a1435] font-heading">
                             {{ $post->title }}
                         </h1>
 
                         @if ($post->excerpt)
-                            <p class="text-lg sm:text-xl text-gray-600 max-w-3xl">{{ $post->excerpt }}</p>
+                            <p class="text-xl sm:text-2xl text-[#6b5b59] leading-relaxed">{{ $post->excerpt }}</p>
                         @endif
 
-                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                        <div class="flex flex-wrap items-center gap-4 text-[11px] font-mono uppercase tracking-widest text-[#735A56] border-y border-[#e2d5cf] py-6">
                             @if (!empty($post->category))
                                 <a href="{{ route('categories.show', $post->category->slug) }}"
-                                    class="inline-flex items-center rounded-full border border-gray-200 px-3 py-1 font-semibold text-gray-900 hover:border-indigo-200 hover:text-indigo-700">
+                                    class="border border-[#0a1435] px-4 py-1.5 font-bold text-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] transition">
                                     {{ $post->category->name }}
                                 </a>
                             @endif
-                            <span class="text-gray-300">•</span>
+                            <span class="hidden sm:inline">&middot;</span>
                             <span>{{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}</span>
-                            <span class="text-gray-300">•</span>
-                            <span>Oleh {{ $post->user->name ?? 'Admin' }}</span>
-                        </div>
-
-                        <div class="flex items-center gap-3">
-                            <img src="{{ $post->user->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name ?? 'Author') . '&background=111827&color=fff' }}"
-                                alt="{{ $post->user->name ?? 'Author' }}" class="h-12 w-12 rounded-full bg-gray-100" />
-                            <div class="text-sm text-gray-600">
-                                <p class="font-semibold text-gray-900">{{ $post->user->name ?? 'Author' }}</p>
-                                <p>{{ $post->user->role ?? 'Contributor' }}</p>
-                            </div>
+                            <span class="hidden sm:inline">&middot;</span>
+                            <span class="flex items-center gap-2">
+                                <img src="{{ $post->user->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name ?? 'Author') . '&background=0a1435&color=FDF6F0' }}"
+                                alt="{{ $post->user->name ?? 'Author' }}" class="h-6 w-6 mix-blend-multiply" />
+                                Oleh <span class="font-bold text-[#0a1435]">{{ $post->user->name ?? 'Admin' }}</span>
+                            </span>
                         </div>
                     </div>
 
                     @if ($post->thumbnail)
-                        <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}"
-                            class="mt-10 w-full max-h-[480px] object-cover rounded-2xl shadow-lg">
+                        <div class="mt-12 mb-16">
+                            <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}"
+                                class="w-full h-auto max-h-[600px] object-cover border border-[#e2d5cf]">
+                        </div>
                     @endif
 
-                    <div class="mt-10">
-                        <div
-                            class="prose prose-lg max-w-none prose-headings:font-semibold prose-a:text-indigo-600 quill-content">
+                    <!-- Article Body -->
+                    <div class="mt-12">
+                        <div class="quill-content max-w-[800px]">
                             {!! $post->content !!}
                         </div>
                     </div>
 
+                    <!-- Related Posts -->
                     @if ($relatedPosts->isNotEmpty())
-                        <div class="mt-16 pt-12 border-t">
-                            <h2 class="text-2xl font-bold mb-6">Related Articles</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="mt-24 pt-16 border-t-2 border-[#0a1435] max-w-[900px]">
+                            <h2 class="text-3xl font-normal text-faux-medium text-[#0a1435] font-heading mb-10">Artikel Terkait</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 @foreach ($relatedPosts as $related)
-                                    <article
-                                        class="rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-lg transition">
-                                        @if ($related->thumbnail)
-                                            <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}"
-                                                class="w-full h-40 object-cover rounded-t-xl">
-                                        @else
-                                            <div
-                                                class="w-full h-40 rounded-t-xl bg-gradient-to-br from-blue-400 to-blue-600">
+                                    <article class="group">
+                                        <div class="aspect-[4/3] overflow-hidden mb-5 border border-[#e2d5cf]">
+                                            @if ($related->thumbnail)
+                                                <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}"
+                                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                                            @else
+                                                <div class="w-full h-full bg-[#0a1435] group-hover:scale-105 transition duration-700"></div>
+                                            @endif
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div class="inline-flex items-center gap-2 text-[11px] text-[#735A56] font-mono tracking-widest uppercase">
+                                                <span class="font-bold text-[#0a1435]">{{ $related->category->name ?? 'Umum' }}</span>
+                                                <span>&middot;</span>
+                                                <time>{{ optional($related->published_at ?? $related->created_at)->translatedFormat('d M Y') }}</time>
                                             </div>
-                                        @endif
-
-                                        <div class="p-4">
-                                            <h3 class="font-semibold mb-2 text-gray-900 hover:text-indigo-600">
-                                                <a
-                                                    href="{{ route('posts.show', $related->slug) }}">{{ $related->title }}</a>
+                                            <h3 class="text-xl font-normal text-faux-medium text-[#0a1435] font-heading leading-snug group-hover:text-brand-primary transition">
+                                                <a href="{{ route('posts.show', $related->slug) }}">{{ $related->title }}</a>
                                             </h3>
-                                            <p class="text-sm text-gray-500">
-                                                {{ optional($related->published_at ?? $related->created_at)->translatedFormat('d M Y') }}
-                                            </p>
                                         </div>
                                     </article>
                                 @endforeach
@@ -153,88 +159,98 @@
                     @endif
                 </article>
 
-                <aside class="lg:w-80 lg:flex-none space-y-6">
-                    {{-- Author card --}}
-                    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 space-y-4">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-indigo-600">Profil Penulis</p>
-                        <div class="flex items-center gap-3">
+                <!-- Sidebar -->
+                <aside class="lg:col-span-4 xl:col-span-3 space-y-12 lg:border-l border-[#e2d5cf] lg:pl-10 xl:pl-12">
+                    
+                    {{-- Author Profile Widget --}}
+                    <div class="space-y-6">
+                        <div class="border-b border-[#0a1435] pb-2">
+                            <p class="text-[11px] font-bold uppercase tracking-widest text-[#0a1435] font-mono">Profil Penulis</p>
+                        </div>
+                        <div class="flex items-center gap-4">
                             @php
-                                $avatar =
-                                    optional($sidebar)->author_avatar_url ?:
-                                    'https://ui-avatars.com/api/?name=' .
-                                        urlencode(optional($sidebar)->author_name ?? ($post->user->name ?? 'Author')) .
-                                        '&background=e8edff&color=312e81';
+                                $avatar = optional($sidebar)->author_avatar_url ?:
+                                    'https://ui-avatars.com/api/?name=' . urlencode(optional($sidebar)->author_name ?? ($post->user->name ?? 'Author')) . '&background=0a1435&color=FDF6F0';
                             @endphp
                             <img src="{{ $avatar }}"
                                 alt="{{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}"
-                                class="h-12 w-12 rounded-full bg-indigo-50 object-cover" />
+                                class="h-16 w-16 mix-blend-multiply border border-[#e2d5cf] p-1 object-cover" />
                             <div>
-                                <p class="font-semibold text-gray-900">
-                                    {{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}</p>
-                                <p class="text-sm text-gray-600">{{ optional($sidebar)->author_role ?? 'Kontributor' }}</p>
+                                <p class="text-lg font-bold text-[#0a1435] font-sans">
+                                    {{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}
+                                </p>
+                                <p class="text-[11px] text-[#735A56] font-mono tracking-widest uppercase mt-1">
+                                    {{ optional($sidebar)->author_role ?? 'Kontributor' }}
+                                </p>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-700 leading-relaxed">
-                            {{ optional($sidebar)->author_bio ?? 'Ikuti akun kami untuk update terbaru seputar artikel.' }}
+                        <p class="text-[15px] text-[#6b5b59] leading-relaxed">
+                            {{ optional($sidebar)->author_bio ?? 'Ikuti akun kami untuk update terbaru seputar strategi digital dan artikel inspiratif.' }}
                         </p>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-3">
                             @if (optional($sidebar)->author_tiktok_url)
                                 <a href="{{ optional($sidebar)->author_tiktok_url }}"
-                                    class="px-3 py-2 rounded-xl bg-indigo-50 text-indigo-700 text-sm font-semibold">TikTok</a>
+                                    class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">TikTok</a>
                             @endif
                             @if (optional($sidebar)->author_youtube_url)
                                 <a href="{{ optional($sidebar)->author_youtube_url }}"
-                                    class="px-3 py-2 rounded-xl bg-rose-50 text-rose-600 text-sm font-semibold">YouTube</a>
+                                    class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">YouTube</a>
                             @endif
                             @if (optional($sidebar)->author_newsletter_url)
                                 <a href="{{ optional($sidebar)->author_newsletter_url }}"
-                                    class="px-3 py-2 rounded-xl bg-gray-50 text-gray-700 text-sm font-semibold">Newsletter</a>
+                                    class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">Newsletter</a>
                             @endif
                         </div>
                     </div>
 
-                    {{-- Trending card --}}
-                    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <p class="text-lg font-semibold text-gray-900">
-                                {{ optional($sidebar)->trending_title ?? 'Sedang Tren' }}</p>
+                    {{-- Trending Widget --}}
+                    <div class="space-y-6">
+                        <div class="border-b border-[#0a1435] pb-2 flex items-center justify-between">
+                            <p class="text-[11px] font-bold uppercase tracking-widest text-[#0a1435] font-mono">
+                                {{ optional($sidebar)->trending_title ?? 'Sedang Tren' }}
+                            </p>
                             @if (optional($sidebar)->trending_link_url && optional($sidebar)->trending_link_text)
                                 <a href="{{ optional($sidebar)->trending_link_url }}"
-                                    class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+                                    class="text-[11px] font-bold uppercase tracking-widest text-brand-primary hover:text-[#0a1435] font-mono transition">
                                     {{ optional($sidebar)->trending_link_text }}
                                 </a>
                             @endif
                         </div>
-                        <p class="text-sm text-gray-600">Belum ada artikel tren.</p>
+                        <div class="space-y-4">
+                            {{-- Add actual trending loop here if variable exists, otherwise fallback --}}
+                            <p class="text-[15px] text-[#6b5b59]">Belum ada artikel tren minggu ini.</p>
+                        </div>
                     </div>
 
-                    {{-- CTA card --}}
-                    <div class="rounded-2xl border border-gray-200 bg-white shadow-xl p-6 space-y-3">
+                    {{-- CTA Widget --}}
+                    <div class="bg-[#0a1435] text-[#FDF6F0] p-8 space-y-6">
                         @if (optional($sidebar)->cta_badge)
-                            <p class="text-xs font-semibold uppercase tracking-wide text-indigo-600">
-                                {{ optional($sidebar)->cta_badge }}</p>
+                            <p class="text-[11px] font-bold uppercase tracking-widest text-brand-primary font-mono">
+                                {{ optional($sidebar)->cta_badge }}
+                            </p>
                         @endif
                         @if (optional($sidebar)->cta_title)
-                            <h3 class="text-lg font-bold text-gray-900 leading-6">{{ optional($sidebar)->cta_title }}</h3>
+                            <h3 class="text-3xl font-normal text-faux-medium font-heading leading-tight">{{ optional($sidebar)->cta_title }}</h3>
                         @endif
                         @if (optional($sidebar)->cta_subtitle)
-                            <p class="text-sm text-gray-600">{{ optional($sidebar)->cta_subtitle }}</p>
+                            <p class="text-[15px] text-[#e2d5cf] opacity-90 leading-relaxed">{{ optional($sidebar)->cta_subtitle }}</p>
                         @endif
-                        <div class="pt-2 space-y-3">
+                        <div class="pt-4 space-y-4">
                             @if (optional($sidebar)->cta_primary_text && optional($sidebar)->cta_primary_url)
                                 <a href="{{ optional($sidebar)->cta_primary_url }}"
-                                    class="block w-full rounded-full bg-amber-400 px-4 py-3 text-center text-sm font-semibold text-gray-900 shadow hover:shadow-md transition">
+                                    class="block w-full border border-transparent bg-brand-primary hover:bg-white hover:text-[#0a1435] px-6 py-4 text-center text-[12px] font-bold uppercase tracking-widest font-mono transition">
                                     {{ optional($sidebar)->cta_primary_text }}
                                 </a>
                             @endif
                             @if (optional($sidebar)->cta_secondary_text && optional($sidebar)->cta_secondary_url)
                                 <a href="{{ optional($sidebar)->cta_secondary_url }}"
-                                    class="block w-full rounded-full border border-gray-300 px-4 py-3 text-center text-sm font-semibold text-gray-900 hover:bg-gray-50 transition">
+                                    class="block w-full border border-[#FDF6F0] bg-transparent hover:bg-[#FDF6F0] hover:text-[#0a1435] px-6 py-4 text-center text-[12px] font-bold uppercase tracking-widest font-mono transition">
                                     {{ optional($sidebar)->cta_secondary_text }}
                                 </a>
                             @endif
                         </div>
                     </div>
+
                 </aside>
             </div>
         </div>
