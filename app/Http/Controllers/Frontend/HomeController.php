@@ -19,17 +19,7 @@ class HomeController extends Controller
             ->take(24)
             ->get();
 
-        $latestPosts = Post::published()
-            ->with(['category', 'user'])
-            ->latest('published_at')
-            ->take(6)
-            ->get();
 
-        $trendingPosts = Post::published()
-            ->with(['category', 'user'])
-            ->latest('published_at')
-            ->take(6)
-            ->get();
 
         $categories = Category::has('publishedPosts')
             ->withCount('publishedPosts')
@@ -43,9 +33,9 @@ class HomeController extends Controller
         return view('frontend.home', [
             'heroPost' => $posts->first(),
             'topStripPosts' => $posts->skip(1)->take(3),
-            'featureGridPosts' => $latestPosts,
+            'featureGridPosts' => $posts->take(6),
             'spotlightPosts' => $posts->skip(10)->take(6),
-            'trendingPosts' => $trendingPosts,
+            'trendingPosts' => $posts->take(6),
             'categories' => $categories,
             'sidebar' => $sidebar,
             'galleryItems' => $galleryItems,

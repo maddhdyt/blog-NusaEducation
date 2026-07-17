@@ -1,36 +1,36 @@
-@extends('layouts.frontend')
+<?php $__env->startSection('meta_description'); ?>
+<?php echo e($post->meta_description ?? \Illuminate\Support\Str::limit(strip_tags($post->content), 160)); ?>
 
-@section('meta_description')
-{{ $post->meta_description ?? \Illuminate\Support\Str::limit(strip_tags($post->content), 160) }}
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('og_type', 'article')
+<?php $__env->startSection('og_type', 'article'); ?>
 
-@if($post->thumbnail)
-@section('og_image')
-{{ asset('storage/' . $post->thumbnail) }}
-@endsection
-@endif
+<?php if($post->thumbnail): ?>
+<?php $__env->startSection('og_image'); ?>
+<?php echo e(asset('storage/' . $post->thumbnail)); ?>
 
-@section('structured_data')
+<?php $__env->stopSection(); ?>
+<?php endif; ?>
+
+<?php $__env->startSection('structured_data'); ?>
 <script type="application/ld+json">
 {
-  "@@context": "https://schema.org",
-  "@@type": "Article",
-  "headline": "{{ $post->title }}",
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "<?php echo e($post->title); ?>",
   "image": [
-    "{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : '' }}"
+    "<?php echo e($post->thumbnail ? asset('storage/' . $post->thumbnail) : ''); ?>"
    ],
-  "datePublished": "{{ optional($post->published_at)->toIso8601String() }}",
-  "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+  "datePublished": "<?php echo e(optional($post->published_at)->toIso8601String()); ?>",
+  "dateModified": "<?php echo e($post->updated_at->toIso8601String()); ?>",
   "author": [{
-      "@@type": "Person",
-      "name": "{{ $post->user->name ?? 'Admin' }}"
+      "@type": "Person",
+      "name": "<?php echo e($post->user->name ?? 'Admin'); ?>"
   }]
 }
 </script>
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
     <style>
         .quill-content {
@@ -106,183 +106,194 @@
                 <!-- Main Article Column -->
                 <article class="lg:col-span-8 xl:col-span-9 lg:pr-12 xl:pr-20">
                     <nav class="flex flex-wrap items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#735A56] mb-10">
-                        <a href="{{ route('home') }}" class="hover:text-[#0a1435] transition">Home</a>
+                        <a href="<?php echo e(route('home')); ?>" class="hover:text-[#0a1435] transition">Home</a>
                         <span>/</span>
-                        @if (!empty($post->category))
-                            <a href="{{ route('categories.show', $post->category->slug) }}"
-                                class="hover:text-[#0a1435] transition">{{ $post->category->name }}</a>
+                        <?php if(!empty($post->category)): ?>
+                            <a href="<?php echo e(route('categories.show', $post->category->slug)); ?>"
+                                class="hover:text-[#0a1435] transition"><?php echo e($post->category->name); ?></a>
                             <span>/</span>
-                        @endif
-                        <span class="font-bold text-[#0a1435]">{{ $post->title }}</span>
+                        <?php endif; ?>
+                        <span class="font-bold text-[#0a1435]"><?php echo e($post->title); ?></span>
                     </nav>
 
                     <div class="space-y-8 max-w-[900px]">
                         <h1 class="text-4xl sm:text-5xl lg:text-[4rem] font-normal text-faux-medium leading-[1.1] text-[#0a1435] font-heading">
-                            {{ $post->title }}
+                            <?php echo e($post->title); ?>
+
                         </h1>
 
-                        @if ($post->excerpt)
-                            <p class="text-xl sm:text-2xl text-[#6b5b59] leading-relaxed">{{ $post->excerpt }}</p>
-                        @endif
+                        <?php if($post->excerpt): ?>
+                            <p class="text-xl sm:text-2xl text-[#6b5b59] leading-relaxed"><?php echo e($post->excerpt); ?></p>
+                        <?php endif; ?>
 
                         <div class="flex flex-wrap items-center gap-4 text-[11px] font-mono uppercase tracking-widest text-[#735A56] border-y border-[#e2d5cf] py-6">
-                            @if (!empty($post->category))
-                                <a href="{{ route('categories.show', $post->category->slug) }}"
+                            <?php if(!empty($post->category)): ?>
+                                <a href="<?php echo e(route('categories.show', $post->category->slug)); ?>"
                                     class="border border-[#0a1435] px-4 py-1.5 font-bold text-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] transition">
-                                    {{ $post->category->name }}
+                                    <?php echo e($post->category->name); ?>
+
                                 </a>
-                            @endif
+                            <?php endif; ?>
                             <span class="hidden sm:inline">&middot;</span>
-                            <span>{{ optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y') }}</span>
+                            <span><?php echo e(optional($post->published_at ?? $post->created_at)->translatedFormat('d M Y')); ?></span>
                             <span class="hidden sm:inline">&middot;</span>
                             <span class="flex items-center gap-2">
-                                <img src="{{ $post->user->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name ?? 'Author') . '&background=0a1435&color=FDF6F0' }}"
-                                alt="{{ $post->user->name ?? 'Author' }}" class="h-6 w-6 mix-blend-multiply" />
-                                Oleh <span class="font-bold text-[#0a1435]">{{ $post->user->name ?? 'Admin' }}</span>
+                                <img src="<?php echo e($post->user->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name ?? 'Author') . '&background=0a1435&color=FDF6F0'); ?>"
+                                alt="<?php echo e($post->user->name ?? 'Author'); ?>" class="h-6 w-6 mix-blend-multiply" />
+                                Oleh <span class="font-bold text-[#0a1435]"><?php echo e($post->user->name ?? 'Admin'); ?></span>
                             </span>
                             <span class="hidden sm:inline">&middot;</span>
                             <span class="flex items-center gap-1.5" title="Jumlah Kunjungan">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                {{ number_format($post->views) }} Views
+                                <?php echo e(number_format($post->views)); ?> Views
                             </span>
                         </div>
                     </div>
 
-                    @if ($post->thumbnail)
+                    <?php if($post->thumbnail): ?>
                         <div class="mt-12 mb-16">
-                            <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}"
+                            <img src="<?php echo e($post->thumbnail_url); ?>" alt="<?php echo e($post->title); ?>"
                                 class="w-full h-auto max-h-[600px] object-cover border border-[#e2d5cf]">
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Article Body -->
                     <div class="mt-12">
                         <div class="quill-content max-w-[800px]">
-                            {!! $post->content !!}
+                            <?php echo $post->content; ?>
+
                         </div>
                     </div>
 
                     <!-- Related Posts -->
-                    @if ($relatedPosts->isNotEmpty())
+                    <?php if($relatedPosts->isNotEmpty()): ?>
                         <div class="mt-24 pt-16 border-t-2 border-[#0a1435] max-w-[900px]">
                             <h2 class="text-3xl font-normal text-faux-medium text-[#0a1435] font-heading mb-10">Artikel Terkait</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                @foreach ($relatedPosts as $related)
+                                <?php $__currentLoopData = $relatedPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $related): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <article class="group">
                                         <div class="aspect-[4/3] overflow-hidden mb-5 border border-[#e2d5cf]">
-                                            @if ($related->thumbnail)
-                                                <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}"
+                                            <?php if($related->thumbnail): ?>
+                                                <img src="<?php echo e($related->thumbnail_url); ?>" alt="<?php echo e($related->title); ?>"
                                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                                            @else
+                                            <?php else: ?>
                                                 <div class="w-full h-full bg-[#0a1435] group-hover:scale-105 transition duration-700"></div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div class="space-y-3">
                                             <div class="inline-flex items-center gap-2 text-[11px] text-[#735A56] font-mono tracking-widest uppercase">
-                                                <span class="font-bold text-[#0a1435]">{{ $related->category->name ?? 'Umum' }}</span>
+                                                <span class="font-bold text-[#0a1435]"><?php echo e($related->category->name ?? 'Umum'); ?></span>
                                                 <span>&middot;</span>
-                                                <time>{{ optional($related->published_at ?? $related->created_at)->translatedFormat('d M Y') }}</time>
+                                                <time><?php echo e(optional($related->published_at ?? $related->created_at)->translatedFormat('d M Y')); ?></time>
                                             </div>
                                             <h3 class="text-xl font-normal text-faux-medium text-[#0a1435] font-heading leading-snug group-hover:text-brand-primary transition">
-                                                <a href="{{ route('posts.show', $related->slug) }}">{{ $related->title }}</a>
+                                                <a href="<?php echo e(route('posts.show', $related->slug)); ?>"><?php echo e($related->title); ?></a>
                                             </h3>
                                         </div>
                                     </article>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </article>
 
                 <!-- Sidebar -->
                 <aside class="lg:col-span-4 xl:col-span-3 space-y-12 lg:border-l border-[#e2d5cf] lg:pl-10 xl:pl-12">
                     
-                    {{-- Author Profile Widget --}}
+                    
                     <div class="space-y-6">
                         <div class="border-b border-[#0a1435] pb-2">
                             <p class="text-[11px] font-bold uppercase tracking-widest text-[#0a1435] font-mono">Profil Penulis</p>
                         </div>
                         <div class="flex items-center gap-4">
-                            @php
+                            <?php
                                 $avatar = optional($sidebar)->author_avatar_url ?:
                                     'https://ui-avatars.com/api/?name=' . urlencode(optional($sidebar)->author_name ?? ($post->user->name ?? 'Author')) . '&background=0a1435&color=FDF6F0';
-                            @endphp
-                            <img src="{{ $avatar }}"
-                                alt="{{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}"
+                            ?>
+                            <img src="<?php echo e($avatar); ?>"
+                                alt="<?php echo e(optional($sidebar)->author_name ?? ($post->user->name ?? 'Author')); ?>"
                                 class="h-16 w-16 mix-blend-multiply border border-[#e2d5cf] p-1 object-cover" />
                             <div>
                                 <p class="text-lg font-bold text-[#0a1435] font-sans">
-                                    {{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}
+                                    <?php echo e(optional($sidebar)->author_name ?? ($post->user->name ?? 'Author')); ?>
+
                                 </p>
                                 <p class="text-[11px] text-[#735A56] font-mono tracking-widest uppercase mt-1">
-                                    {{ optional($sidebar)->author_role ?? 'Kontributor' }}
+                                    <?php echo e(optional($sidebar)->author_role ?? 'Kontributor'); ?>
+
                                 </p>
                             </div>
                         </div>
                         <p class="text-[15px] text-[#6b5b59] leading-relaxed">
-                            {{ optional($sidebar)->author_bio ?? 'Ikuti akun kami untuk update terbaru seputar strategi digital dan artikel inspiratif.' }}
+                            <?php echo e(optional($sidebar)->author_bio ?? 'Ikuti akun kami untuk update terbaru seputar strategi digital dan artikel inspiratif.'); ?>
+
                         </p>
                         <div class="flex flex-wrap gap-3">
-                            @if (optional($sidebar)->author_tiktok_url)
-                                <a href="{{ optional($sidebar)->author_tiktok_url }}"
+                            <?php if(optional($sidebar)->author_tiktok_url): ?>
+                                <a href="<?php echo e(optional($sidebar)->author_tiktok_url); ?>"
                                     class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">TikTok</a>
-                            @endif
-                            @if (optional($sidebar)->author_youtube_url)
-                                <a href="{{ optional($sidebar)->author_youtube_url }}"
+                            <?php endif; ?>
+                            <?php if(optional($sidebar)->author_youtube_url): ?>
+                                <a href="<?php echo e(optional($sidebar)->author_youtube_url); ?>"
                                     class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">YouTube</a>
-                            @endif
-                            @if (optional($sidebar)->author_newsletter_url)
-                                <a href="{{ optional($sidebar)->author_newsletter_url }}"
+                            <?php endif; ?>
+                            <?php if(optional($sidebar)->author_newsletter_url): ?>
+                                <a href="<?php echo e(optional($sidebar)->author_newsletter_url); ?>"
                                     class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">Newsletter</a>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
-                    {{-- Trending Widget --}}
+                    
                     <div class="space-y-6">
                         <div class="border-b border-[#0a1435] pb-2 flex items-center justify-between">
                             <p class="text-[11px] font-bold uppercase tracking-widest text-[#0a1435] font-mono">
-                                {{ optional($sidebar)->trending_title ?? 'Sedang Tren' }}
+                                <?php echo e(optional($sidebar)->trending_title ?? 'Sedang Tren'); ?>
+
                             </p>
-                            @if (optional($sidebar)->trending_link_url && optional($sidebar)->trending_link_text)
-                                <a href="{{ optional($sidebar)->trending_link_url }}"
+                            <?php if(optional($sidebar)->trending_link_url && optional($sidebar)->trending_link_text): ?>
+                                <a href="<?php echo e(optional($sidebar)->trending_link_url); ?>"
                                     class="text-[11px] font-bold uppercase tracking-widest text-brand-primary hover:text-[#0a1435] font-mono transition">
-                                    {{ optional($sidebar)->trending_link_text }}
+                                    <?php echo e(optional($sidebar)->trending_link_text); ?>
+
                                 </a>
-                            @endif
+                            <?php endif; ?>
                         </div>
                         <div class="space-y-4">
-                            {{-- Add actual trending loop here if variable exists, otherwise fallback --}}
+                            
                             <p class="text-[15px] text-[#6b5b59]">Belum ada artikel tren minggu ini.</p>
                         </div>
                     </div>
 
-                    {{-- CTA Widget --}}
+                    
                     <div class="bg-[#0a1435] text-[#FDF6F0] p-8 space-y-6">
-                        @if (optional($sidebar)->cta_badge)
+                        <?php if(optional($sidebar)->cta_badge): ?>
                             <p class="text-[11px] font-bold uppercase tracking-widest text-brand-primary font-mono">
-                                {{ optional($sidebar)->cta_badge }}
+                                <?php echo e(optional($sidebar)->cta_badge); ?>
+
                             </p>
-                        @endif
-                        @if (optional($sidebar)->cta_title)
-                            <h3 class="text-3xl font-normal text-faux-medium font-heading leading-tight">{{ optional($sidebar)->cta_title }}</h3>
-                        @endif
-                        @if (optional($sidebar)->cta_subtitle)
-                            <p class="text-[15px] text-[#e2d5cf] opacity-90 leading-relaxed">{{ optional($sidebar)->cta_subtitle }}</p>
-                        @endif
+                        <?php endif; ?>
+                        <?php if(optional($sidebar)->cta_title): ?>
+                            <h3 class="text-3xl font-normal text-faux-medium font-heading leading-tight"><?php echo e(optional($sidebar)->cta_title); ?></h3>
+                        <?php endif; ?>
+                        <?php if(optional($sidebar)->cta_subtitle): ?>
+                            <p class="text-[15px] text-[#e2d5cf] opacity-90 leading-relaxed"><?php echo e(optional($sidebar)->cta_subtitle); ?></p>
+                        <?php endif; ?>
                         <div class="pt-4 space-y-4">
-                            @if (optional($sidebar)->cta_primary_text && optional($sidebar)->cta_primary_url)
-                                <a href="{{ optional($sidebar)->cta_primary_url }}"
+                            <?php if(optional($sidebar)->cta_primary_text && optional($sidebar)->cta_primary_url): ?>
+                                <a href="<?php echo e(optional($sidebar)->cta_primary_url); ?>"
                                     class="block w-full border border-transparent bg-brand-primary hover:bg-white hover:text-[#0a1435] px-6 py-4 text-center text-[12px] font-bold uppercase tracking-widest font-mono transition">
-                                    {{ optional($sidebar)->cta_primary_text }}
+                                    <?php echo e(optional($sidebar)->cta_primary_text); ?>
+
                                 </a>
-                            @endif
-                            @if (optional($sidebar)->cta_secondary_text && optional($sidebar)->cta_secondary_url)
-                                <a href="{{ optional($sidebar)->cta_secondary_url }}"
+                            <?php endif; ?>
+                            <?php if(optional($sidebar)->cta_secondary_text && optional($sidebar)->cta_secondary_url): ?>
+                                <a href="<?php echo e(optional($sidebar)->cta_secondary_url); ?>"
                                     class="block w-full border border-[#FDF6F0] bg-transparent hover:bg-[#FDF6F0] hover:text-[#0a1435] px-6 py-4 text-center text-[12px] font-bold uppercase tracking-widest font-mono transition">
-                                    {{ optional($sidebar)->cta_secondary_text }}
+                                    <?php echo e(optional($sidebar)->cta_secondary_text); ?>
+
                                 </a>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -290,4 +301,6 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.frontend', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>

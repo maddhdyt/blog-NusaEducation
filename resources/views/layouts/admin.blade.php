@@ -179,24 +179,33 @@
             <!-- Content -->
             <main class="flex-1 p-6 overflow-y-auto overflow-x-hidden">
                 @if (session('success'))
-                    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                        {{ session('success') }}
+                    <div x-data="{ show: true }" x-show="show" class="mb-6 p-4 bg-green-100 border border-[#0a1435] text-[#0a1435] font-semibold text-sm flex justify-between items-center">
+                        <span>{{ session('success') }}</span>
+                        <button @click="show = false" class="text-[#0a1435] hover:text-black focus:outline-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
                     </div>
                 @endif
 
                 @if (session('error'))
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                        {{ session('error') }}
+                    <div x-data="{ show: true }" x-show="show" class="mb-6 p-4 bg-red-100 border border-red-700 text-red-700 font-semibold text-sm flex justify-between items-center">
+                        <span>{{ session('error') }}</span>
+                        <button @click="show = false" class="text-red-700 hover:text-black focus:outline-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div x-data="{ show: true }" x-show="show" class="mb-6 p-4 bg-red-100 border border-red-700 text-red-700 font-semibold text-sm flex justify-between items-start">
                         <ul class="list-disc list-inside">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
+                        <button @click="show = false" class="text-red-700 hover:text-black focus:outline-none mt-0.5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
                     </div>
                 @endif
 

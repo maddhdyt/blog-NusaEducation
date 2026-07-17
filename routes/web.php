@@ -27,7 +27,7 @@ Route::get('/blog/{post:slug}', [FrontendPostController::class, 'show'])->name('
 Route::get('/category/{category:slug}', [FrontendCategoryController::class, 'show'])->name('categories.show');
 Route::get('/gallery', [FrontendGalleryController::class, 'index'])->name('gallery.index');
 Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('newsletter.subscribe');
-
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
 // Auth Routes
 require __DIR__.'/auth.php';
 

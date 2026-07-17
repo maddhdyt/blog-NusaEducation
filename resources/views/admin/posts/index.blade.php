@@ -13,12 +13,6 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="bg-[#b4f3b4] border border-[#0a1435] text-[#0a1435] font-bold px-4 py-3 mb-6">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="card bg-white mt-4">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -29,6 +23,7 @@
                         <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Author</th>
                         <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Status</th>
                         <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Date</th>
+                        <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435]">Views</th>
                         <th class="py-4 px-6 text-xs font-bold text-[#0a1435] uppercase tracking-wider border-b border-[#0a1435] text-right">Actions</th>
                     </tr>
                 </thead>
@@ -55,6 +50,7 @@
                                 @endif
                             </td>
                             <td class="py-4 px-6 text-sm font-semibold text-[#0a1435]">{{ $post->created_at->format('M d, Y') }}</td>
+                            <td class="py-4 px-6 text-sm font-semibold text-[#0a1435]">{{ number_format($post->views) }}</td>
                             <td class="py-4 px-6 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     @if ($post->status === 'published')
@@ -83,7 +79,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-[#0a1435] font-semibold">No posts yet</td>
+                            <td colspan="7" class="py-8 text-center text-[#0a1435] font-semibold">No posts yet</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -19,6 +19,7 @@ class Post extends Model
         'thumbnail',
         'meta_description',
         'status',
+        'views',
         'published_at',
     ];
 

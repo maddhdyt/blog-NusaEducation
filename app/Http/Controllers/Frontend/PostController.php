@@ -51,6 +51,12 @@ class PostController extends Controller
         
         $post->load(['category', 'user']);
         
+        $sessionKey = 'viewed_post_' . $post->id;
+        if (!session()->has($sessionKey)) {
+            $post->increment('views');
+            session()->put($sessionKey, true);
+        }
+        
         $relatedPosts = Post::published()
             ->where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
@@ -59,6 +65,11 @@ class PostController extends Controller
 
         $sidebar = SidebarSetting::first();
         
-        return view('frontend.posts.show', compact('post', 'relatedPosts', 'sidebar'));
+        return view('frontend.posts.show', [
+            'post' => $post,
+            'relatedPosts' => $relatedPosts,
+            'sidebar' => $sidebar,
+            'title' => $post->title,
+        ]);
     }
 }

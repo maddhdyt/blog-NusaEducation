@@ -1,9 +1,3 @@
-@php
-    $menus = \App\Models\Menu::active()->parentOnly()->with('children')->orderBy('order')->get();
-    $sidebarSetting = \App\Models\SidebarSetting::first();
-    $siteLogo = optional($sidebarSetting)->site_logo_url ?: 'https://ik.imagekit.io/yqhp1cmbp/logo%20nusa%20education.png?tr=w-640,q-75,f-auto';
-@endphp
-
 <nav class="bg-white/95 backdrop-blur shadow-sm border-b border-[#e2d5cf] sticky top-0 z-50">
     <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
         <div class="flex justify-between items-center h-20">

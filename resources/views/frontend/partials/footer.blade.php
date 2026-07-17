@@ -1,13 +1,3 @@
-@php
-    $sidebarSetting = \App\Models\SidebarSetting::first();
-    $footerMenus = \App\Models\Menu::active()->parentOnly()->with('children')->orderBy('order')->get();
-    $footerCategories = \App\Models\Category::withCount('publishedPosts')
-        ->orderByDesc('published_posts_count')
-        ->limit(5)
-        ->get();
-    $footerPosts = \App\Models\Post::published()->with('category')->latest('published_at')->limit(4)->get();
-@endphp
-
 <footer class="bg-[#FDF6F0] text-[#6b5b59] border-t border-[#e2d5cf] pt-12 mt-12 lg:mt-0">
     <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-16">
         <div class="grid gap-12 lg:grid-cols-12">

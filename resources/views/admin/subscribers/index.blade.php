@@ -7,11 +7,7 @@
         <h2 class="text-xl font-heading font-bold text-[#0a1435] tracking-tight">Pelanggan Buletin</h2>
     </div>
 
-    @if (session('success'))
-        <div class="bg-[#b4f3b4] border border-[#0a1435] text-[#0a1435] font-bold px-4 py-3 mb-6">
-            {{ session('success') }}
-        </div>
-    @endif
+
 
     <div class="card bg-white mt-4">
         <div class="overflow-x-auto">
