@@ -40,7 +40,7 @@ class DashboardController extends Controller
             ->get();
 
         // Data for Category Distribution Chart
-        $categoryDistribution = Category::withCount('posts')->having('posts_count', '>', 0)->get();
+        $categoryDistribution = Category::has('posts')->withCount('posts')->orderByDesc('posts_count')->get();
         $chartData = [
             'labels' => $categoryDistribution->pluck('name')->toArray(),
             'data' => $categoryDistribution->pluck('posts_count')->toArray(),

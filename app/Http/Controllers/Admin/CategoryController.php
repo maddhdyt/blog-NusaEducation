@@ -28,11 +28,14 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|unique:categories,slug',
             'description' => 'nullable|string',
+            'meta_description' => 'nullable|string|max:160',
         ]);
         
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
         
         Category::create($validated);
+        
+        \Illuminate\Support\Facades\Cache::forget('footer_categories');
         
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category created successfully.');
@@ -58,11 +61,14 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|unique:categories,slug,' . $category->id,
             'description' => 'nullable|string',
+            'meta_description' => 'nullable|string|max:160',
         ]);
         
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
         
         $category->update($validated);
+        
+        \Illuminate\Support\Facades\Cache::forget('footer_categories');
         
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category updated successfully.');
@@ -71,6 +77,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
+        
+        \Illuminate\Support\Facades\Cache::forget('footer_categories');
         
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');

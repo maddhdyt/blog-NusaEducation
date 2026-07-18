@@ -70,6 +70,8 @@ class SidebarSettingController extends Controller
         $setting->fill($data);
         $setting->save();
 
+        \Illuminate\Support\Facades\Cache::forget('sidebar_setting');
+
         return redirect()->route('admin.sidebar-settings.edit')->with('success', 'Sidebar settings updated.');
     }
 }

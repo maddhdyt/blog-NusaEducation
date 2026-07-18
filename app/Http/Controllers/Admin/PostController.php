@@ -56,6 +56,8 @@ class PostController extends Controller
         $baseSlug = $validated['slug'] ?: $validated['title'];
         $validated['slug'] = $this->makeUniqueSlug($baseSlug);
         
+        $validated['content'] = clean($validated['content']);
+        
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
         }
@@ -65,6 +67,8 @@ class PostController extends Controller
         }
         
         $post = Post::create($validated);
+
+        \Illuminate\Support\Facades\Cache::forget('footer_posts');
 
         if ($post->status === 'published') {
             $this->notifySubscribers($post);
@@ -111,6 +115,8 @@ class PostController extends Controller
         $baseSlug = $validated['slug'] ?: $validated['title'];
         $validated['slug'] = $this->makeUniqueSlug($baseSlug, $post->id);
         
+        $validated['content'] = clean($validated['content']);
+        
         if ($request->hasFile('thumbnail')) {
             // Delete old thumbnail
             if ($post->thumbnail) {
@@ -126,6 +132,8 @@ class PostController extends Controller
         $previousStatus = $post->status;
 
         $post->update($validated);
+
+        \Illuminate\Support\Facades\Cache::forget('footer_posts');
 
         $justPublished = $previousStatus !== 'published' && $post->status === 'published';
 
@@ -148,6 +156,8 @@ class PostController extends Controller
         
         $post->delete();
         
+        \Illuminate\Support\Facades\Cache::forget('footer_posts');
+
         return redirect()->route('admin.posts.index')
             ->with('success', 'Post deleted successfully.');
     }
@@ -162,7 +172,7 @@ class PostController extends Controller
                         continue;
                     }
 
-                    Mail::to([$subscriber->email => $subscriber->name ?? null])
+                    Mail::to($subscriber->email)
                         ->send(new NewPostMail($post));
                 }
             });

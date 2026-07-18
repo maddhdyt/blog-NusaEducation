@@ -33,7 +33,7 @@ class GalleryController extends Controller
         GalleryItem::create([
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
-            'image_path' => Storage::url($path),
+            'image_path' => $path,
         ]);
 
         return redirect()->route('admin.galleries.index')->with('success', 'Gallery item created.');
@@ -54,7 +54,7 @@ class GalleryController extends Controller
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('gallery', 'public');
-            $data['image_path'] = Storage::url($path);
+            $data['image_path'] = $path;
         }
 
         $gallery->update($data);

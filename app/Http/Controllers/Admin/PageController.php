@@ -41,6 +41,8 @@ class PageController extends Controller
         
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['title']);
         
+        $validated['content'] = clean($validated['content']);
+        
         Page::create($validated);
         
         return redirect()->route('admin.pages.index')
@@ -77,6 +79,8 @@ class PageController extends Controller
         ]);
         
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['title']);
+        
+        $validated['content'] = clean($validated['content']);
         
         $page->update($validated);
         

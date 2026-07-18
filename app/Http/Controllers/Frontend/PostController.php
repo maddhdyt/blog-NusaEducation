@@ -58,12 +58,15 @@ class PostController extends Controller
         }
         
         $relatedPosts = Post::published()
+            ->with('category')
             ->where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
             ->limit(3)
             ->get();
 
-        $sidebar = SidebarSetting::first();
+        $sidebar = \Illuminate\Support\Facades\Cache::rememberForever('sidebar_setting', function () {
+            return SidebarSetting::first();
+        });
         
         return view('frontend.posts.show', [
             'post' => $post,

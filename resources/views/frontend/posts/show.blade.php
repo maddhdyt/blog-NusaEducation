@@ -157,7 +157,7 @@
 
                     <!-- Article Body -->
                     <div class="mt-12">
-                        <div class="quill-content max-w-[800px]">
+                        <div class="quill-content w-full">
                             {!! $post->content !!}
                         </div>
                     </div>

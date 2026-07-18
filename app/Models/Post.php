@@ -71,8 +71,5 @@ class Post extends Model
             ->where('published_at', '<=', now());
     }
 
-    public function scopeLatest($query)
-    {
-        return $query->orderBy('published_at', 'desc');
-    }
+
 }

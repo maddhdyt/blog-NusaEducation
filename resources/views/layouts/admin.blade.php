@@ -15,6 +15,15 @@
         <link rel="icon" href="{{ $favicon }}" type="image/png">
         <link rel="apple-touch-icon" href="{{ $favicon }}">
     @endif
+
+    <!-- NProgress CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
+    <style>
+        #nprogress .bar { background: #0a1435 !important; height: 3px !important; }
+        #nprogress .peg { box-shadow: 0 0 10px #0a1435, 0 0 5px #0a1435 !important; }
+        #nprogress .spinner-icon { border-top-color: #0a1435 !important; border-left-color: #0a1435 !important; }
+    </style>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -32,7 +41,7 @@
                 <!-- Utama -->
                 <div class="mb-6">
                     <div class="px-4 mb-2 text-xs font-bold text-[#0a1435]/50 uppercase tracking-widest">Utama</div>
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'sidebar-link-active' : '' }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +57,7 @@
                 <!-- Konten -->
                 <div class="mb-6">
                     <div class="px-4 mb-2 text-xs font-bold text-[#0a1435]/50 uppercase tracking-widest">Konten</div>
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <a href="{{ route('admin.posts.index') }}"
                             class="sidebar-link {{ request()->routeIs('admin.posts.*') ? 'sidebar-link-active' : '' }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +102,7 @@
                 <!-- Komunitas -->
                 <div class="mb-6">
                     <div class="px-4 mb-2 text-xs font-bold text-[#0a1435]/50 uppercase tracking-widest">Komunitas</div>
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <a href="{{ route('admin.subscribers.index') }}"
                             class="sidebar-link {{ request()->routeIs('admin.subscribers.*') ? 'sidebar-link-active' : '' }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +126,7 @@
                 <!-- Pengaturan -->
                 <div class="mb-6">
                     <div class="px-4 mb-2 text-xs font-bold text-[#0a1435]/50 uppercase tracking-widest">Pengaturan</div>
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <a href="{{ route('admin.menus.index') }}"
                             class="sidebar-link {{ request()->routeIs('admin.menus.*') ? 'sidebar-link-active' : '' }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,6 +222,23 @@
             </main>
         </div>
     </div>
+
+    <!-- NProgress JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            NProgress.configure({ showSpinner: false });
+            document.querySelectorAll('a').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    if (anchor.href && !anchor.href.startsWith('#') && !anchor.href.startsWith('javascript:') && anchor.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                        NProgress.start();
+                    }
+                });
+            });
+        });
+        window.addEventListener('pageshow', function() { NProgress.done(); });
+    </script>
+    
     @stack('scripts')
 </body>
 

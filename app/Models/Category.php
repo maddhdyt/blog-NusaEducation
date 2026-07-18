@@ -14,6 +14,7 @@ class Category extends Model
         'name',
         'slug',
         'description',
+        'meta_description',
     ];
 
     protected static function boot()

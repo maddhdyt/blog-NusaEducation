@@ -45,6 +45,9 @@ class MenuController extends Controller
         
         Menu::create($validated);
         
+        \Illuminate\Support\Facades\Cache::forget('navbar_menus');
+        \Illuminate\Support\Facades\Cache::forget('footer_menus');
+        
         return redirect()->route('admin.menus.index')
             ->with('success', 'Menu created successfully.');
     }
@@ -85,6 +88,9 @@ class MenuController extends Controller
         
         $menu->update($validated);
         
+        \Illuminate\Support\Facades\Cache::forget('navbar_menus');
+        \Illuminate\Support\Facades\Cache::forget('footer_menus');
+        
         return redirect()->route('admin.menus.index')
             ->with('success', 'Menu updated successfully.');
     }
@@ -92,6 +98,9 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         $menu->delete();
+        
+        \Illuminate\Support\Facades\Cache::forget('navbar_menus');
+        \Illuminate\Support\Facades\Cache::forget('footer_menus');
         
         return redirect()->route('admin.menus.index')
             ->with('success', 'Menu deleted successfully.');

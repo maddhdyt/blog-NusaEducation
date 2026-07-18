@@ -26,7 +26,9 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
-        $sidebar = SidebarSetting::first();
+        $sidebar = \Illuminate\Support\Facades\Cache::rememberForever('sidebar_setting', function () {
+            return SidebarSetting::first();
+        });
 
         $galleryItems = GalleryItem::latest()->take(6)->get();
 
