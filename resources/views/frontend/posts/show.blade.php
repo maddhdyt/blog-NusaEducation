@@ -134,7 +134,7 @@
                     </nav>
 
                     <div class="space-y-8 max-w-[900px]">
-                        <h1 style="line-height: 1.2;" class="text-3xl sm:text-4xl lg:text-[4rem] font-normal text-faux-medium text-[#0a1435] font-heading">
+                        <h1 style="line-height: 1.1;" class="text-3xl sm:text-4xl lg:text-[4rem] font-normal text-faux-medium text-[#0a1435] font-heading">
                             {{ $post->title }}
                         </h1>
 
