@@ -18,6 +18,8 @@ class Post extends Model
         'content',
         'thumbnail',
         'meta_description',
+        'focus_keyword',
+        'seo_score',
         'status',
         'views',
         'published_at',

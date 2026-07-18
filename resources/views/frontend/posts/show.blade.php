@@ -35,8 +35,14 @@
     <style>
         .quill-content {
             color: #433836;
-            font-size: 1.25rem; /* 20px for better readability */
-            line-height: 1.8;
+            font-size: 1.0625rem; /* 17px for mobile */
+            line-height: 1.7;
+        }
+        @media (min-width: 768px) {
+            .quill-content {
+                font-size: 1.25rem; /* 20px for desktop */
+                line-height: 1.8;
+            }
         }
         .quill-content img {
             max-width: 100%;
@@ -66,8 +72,12 @@
             margin-top: 3rem;
             margin-bottom: 1.25rem;
         }
-        .quill-content h2 { font-size: 2.5rem; }
-        .quill-content h3 { font-size: 1.875rem; }
+        .quill-content h2 { font-size: 1.75rem; }
+        .quill-content h3 { font-size: 1.5rem; }
+        @media (min-width: 768px) {
+            .quill-content h2 { font-size: 2.5rem; }
+            .quill-content h3 { font-size: 1.875rem; }
+        }
         .quill-content ul {
             list-style: disc;
             padding-left: 1.5rem;
@@ -80,12 +90,19 @@
         }
         .quill-content blockquote {
             border-left: 4px solid #0a1435;
-            padding-left: 2rem;
-            margin: 2.5rem 0;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
             color: #6b5b59;
             font-style: italic;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             line-height: 1.6;
+        }
+        @media (min-width: 768px) {
+            .quill-content blockquote {
+                padding-left: 2rem;
+                margin: 2.5rem 0;
+                font-size: 1.5rem;
+            }
         }
         .quill-content pre {
             background: #0a1435;
@@ -117,12 +134,12 @@
                     </nav>
 
                     <div class="space-y-8 max-w-[900px]">
-                        <h1 class="text-4xl sm:text-5xl lg:text-[4rem] font-normal text-faux-medium leading-[1.1] text-[#0a1435] font-heading">
+                        <h1 class="text-3xl sm:text-4xl lg:text-[4rem] font-normal text-faux-medium leading-[1.15] text-[#0a1435] font-heading">
                             {{ $post->title }}
                         </h1>
 
                         @if ($post->excerpt)
-                            <p class="text-xl sm:text-2xl text-[#6b5b59] leading-relaxed">{{ $post->excerpt }}</p>
+                            <p class="text-base sm:text-lg lg:text-xl text-[#6b5b59] leading-relaxed">{{ $post->excerpt }}</p>
                         @endif
 
                         <div class="flex flex-wrap items-center gap-4 text-[11px] font-mono uppercase tracking-widest text-[#735A56] border-y border-[#e2d5cf] py-6">

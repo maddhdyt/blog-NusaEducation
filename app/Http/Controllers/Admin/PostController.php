@@ -48,6 +48,8 @@ class PostController extends Controller
             'content' => 'required|string',
             'thumbnail' => 'nullable|image|max:2048',
             'meta_description' => 'nullable|string|max:160',
+            'focus_keyword' => 'nullable|string|max:255',
+            'seo_score' => 'nullable|integer',
             'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
         ]);
@@ -108,6 +110,8 @@ class PostController extends Controller
             'content' => 'required|string',
             'thumbnail' => 'nullable|image|max:2048',
             'meta_description' => 'nullable|string|max:160',
+            'focus_keyword' => 'nullable|string|max:255',
+            'seo_score' => 'nullable|integer',
             'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
         ]);

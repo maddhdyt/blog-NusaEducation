@@ -51,6 +51,37 @@
                         <p class="text-xs font-bold text-gray-500 mt-2 uppercase tracking-wider">Direkomendasikan untuk SEO yang lebih baik.</p>
                     </div>
                 </div>
+
+                <!-- SEO Analyzer -->
+                <div class="card p-6 space-y-6">
+                    <h3 class="text-xl font-bold text-[#0a1435] mb-4 pb-2 border-b border-[#0a1435] uppercase tracking-wider">SEO Analyzer</h3>
+                    
+                    <div>
+                        <label class="form-label" for="focus_keyword">Focus Keyword</label>
+                        <input type="text" name="focus_keyword" id="focus_keyword" class="form-input" placeholder="Masukkan kata kunci utama (contoh: belajar laravel)..." value="{{ old('focus_keyword') }}">
+                    </div>
+
+                    <!-- Google Search Preview -->
+                    <div class="mt-6 border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                        <h4 class="text-sm font-bold text-gray-500 mb-2 uppercase tracking-wider">Google Search Preview</h4>
+                        <div class="google-preview" style="font-family: Arial, sans-serif; max-width: 600px;">
+                            <div class="text-[14px] text-[#202124] mb-1 flex items-center gap-2">
+                                <span class="bg-gray-200 w-5 h-5 rounded-full inline-block"></span> 
+                                <span id="seo-preview-url">https://blog.nusaeducation.com/post/judul-post</span>
+                            </div>
+                            <div class="text-[20px] text-[#1a0dab] font-normal hover:underline cursor-pointer truncate" id="seo-preview-title">Judul Postingan Akan Muncul Di Sini - Nusa Education</div>
+                            <div class="text-[14px] text-[#4d5156] line-clamp-2 leading-[1.58] mt-1" id="seo-preview-desc">Deskripsi meta belum diisi. Masukkan deskripsi meta agar muncul di hasil pencarian Google dengan rapi.</div>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Checklist -->
+                    <div class="mt-6">
+                        <h4 class="text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">Analysis Results</h4>
+                        <ul class="space-y-3" id="seo-checklist">
+                            <li class="flex items-center gap-2 text-sm text-gray-500"><span class="w-3 h-3 rounded-full bg-gray-300"></span> Masukkan Focus Keyword terlebih dahulu.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Column: Settings Area -->
@@ -143,4 +174,5 @@
         // Initialize with existing content if any (ensures hidden input synced on load)
         contentInput.value = quill.root.innerHTML;
     </script>
+    <script src="{{ asset('js/seo-analyzer.js') }}"></script>
 @endsection
