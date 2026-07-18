@@ -14,7 +14,7 @@
                     <span class="inline-block px-1 mb-6 text-sm font-bold text-gray-600 bg-white tracking-widest font-mono">
                         Blog Nusa Education
                     </span>
-                    <h2 class="text-3xl sm:text-5xl lg:text-6xl font-normal text-faux-semibold text-gray-900 tracking-tight font-heading leading-[1.1] whitespace-nowrap">
+                    <h2 class="text-3xl sm:text-5xl lg:text-6xl font-normal text-faux-semibold text-gray-900 tracking-tight font-heading leading-[1.1]">
                         Wawasan & Strategi Digital Terkini
                     </h2>
                 </div>
