@@ -10,7 +10,7 @@
         </a>
     </div>
 
-    <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data" class="block">
+    <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data" class="block" id="post-form">
         @csrf
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
             
@@ -102,8 +102,9 @@
                             <label class="form-label" for="published_at">Publish Date</label>
                             <input type="datetime-local" name="published_at" id="published_at" class="form-input" value="{{ old('published_at') }}">
                         </div>
-                        <div class="pt-4 border-t border-[#0a1435] flex gap-3">
+                        <div class="pt-4 border-t border-[#0a1435] flex flex-col gap-2">
                             <button type="submit" class="w-full btn-primary py-3">Save Post</button>
+                            <p id="autosave-indicator" class="text-xs text-slate-400 text-center font-medium opacity-0 transition-opacity duration-300"></p>
                         </div>
                     </div>
                 </div>
@@ -138,6 +139,55 @@
             </div>
         </div>
     </form>
+
+    {{-- TomSelect assets --}}
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <style>
+        .ts-wrapper.form-input {
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+        .ts-wrapper {
+            margin-top: 0.25rem;
+        }
+        .ts-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .ts-control.focus {
+            border-color: #0a1435;
+            box-shadow: 0 0 0 2px rgba(10, 20, 53, 0.2);
+        }
+        .ts-wrapper.single .ts-control:after {
+            right: 1.25rem;
+        }
+        .ts-dropdown {
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 0.5rem 0;
+            margin-top: 0.25rem;
+        }
+        .ts-dropdown .create {
+            color: #f97316;
+            font-weight: 500;
+        }
+        .ts-dropdown .option, .ts-dropdown .create {
+            padding: 0.5rem 1rem;
+        }
+        .ts-dropdown .option.active, .ts-dropdown .create.active {
+            background-color: #f8fafc;
+            color: #0a1435;
+        }
+    </style>
 
     {{-- Quill assets and init --}}
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
@@ -224,6 +274,118 @@
 
         // Initialize with existing content if any (ensures hidden input synced on load)
         contentInput.value = quill.root.innerHTML;
+
+        // Auto-Save Logic (LocalStorage)
+        const form = document.getElementById('post-form');
+        const indicator = document.getElementById('autosave-indicator');
+        const draftKey = 'nusa_post_draft_new';
+        let autoSaveTimer;
+
+        // Restore draft on load
+        function restoreDraft() {
+            const draftStr = localStorage.getItem(draftKey);
+            if (draftStr) {
+                try {
+                    const draft = JSON.parse(draftStr);
+                    let hasRestored = false;
+                    
+                    if (draft.title && !document.getElementById('title').value) {
+                        document.getElementById('title').value = draft.title;
+                        hasRestored = true;
+                    }
+                    if (draft.slug && !document.getElementById('slug').value) {
+                        document.getElementById('slug').value = draft.slug;
+                    }
+                    if (draft.excerpt && !document.getElementById('excerpt').value) {
+                        document.getElementById('excerpt').value = draft.excerpt;
+                    }
+                    if (draft.meta_description && !document.getElementById('meta_description').value) {
+                        document.getElementById('meta_description').value = draft.meta_description;
+                    }
+                    if (draft.focus_keyword && !document.getElementById('focus_keyword').value) {
+                        document.getElementById('focus_keyword').value = draft.focus_keyword;
+                    }
+                    if (draft.category_id && !document.getElementById('category_id').value) {
+                        if (typeof categoryTomSelect !== 'undefined') {
+                            categoryTomSelect.setValue(draft.category_id);
+                        } else {
+                            document.getElementById('category_id').value = draft.category_id;
+                        }
+                    }
+                    if (draft.status) {
+                        document.getElementById('status').value = draft.status;
+                    }
+                    if (draft.content && quill.getText().trim().length === 0) {
+                        quill.clipboard.dangerouslyPasteHTML(draft.content);
+                        hasRestored = true;
+                    }
+                    
+                    if (hasRestored) {
+                        indicator.textContent = 'Memulihkan draft lokal...';
+                        indicator.classList.remove('opacity-0');
+                        setTimeout(() => indicator.classList.add('opacity-0'), 3000);
+                        
+                        document.getElementById('title').dispatchEvent(new Event('input'));
+                        document.getElementById('meta_description').dispatchEvent(new Event('input'));
+                    }
+                } catch (e) {
+                    console.error("Error restoring draft", e);
+                }
+            }
+        }
+
+        // Save draft
+        function saveDraft() {
+            const draft = {
+                title: document.getElementById('title').value,
+                slug: document.getElementById('slug').value,
+                excerpt: document.getElementById('excerpt').value,
+                meta_description: document.getElementById('meta_description').value,
+                focus_keyword: document.getElementById('focus_keyword').value,
+                category_id: document.getElementById('category_id').value,
+                status: document.getElementById('status').value,
+                content: quill.root.innerHTML
+            };
+            
+            localStorage.setItem(draftKey, JSON.stringify(draft));
+            
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            
+            indicator.textContent = `Tersimpan di browser pukul ${timeStr}`;
+            indicator.classList.remove('opacity-0');
+        }
+
+        // Listen for changes on form elements
+        const inputElements = form.querySelectorAll('input, select, textarea');
+        inputElements.forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                indicator.textContent = 'Menyimpan...';
+                indicator.classList.remove('opacity-0');
+                autoSaveTimer = setTimeout(saveDraft, 2000);
+            });
+            el.addEventListener('change', () => {
+                clearTimeout(autoSaveTimer);
+                saveDraft();
+            });
+        });
+
+        // Listen for changes on Quill
+        quill.on('text-change', () => {
+            clearTimeout(autoSaveTimer);
+            indicator.textContent = 'Menyimpan...';
+            indicator.classList.remove('opacity-0');
+            autoSaveTimer = setTimeout(saveDraft, 2000);
+        });
+
+        // Clear draft on successful submit
+        form.addEventListener('submit', () => {
+            localStorage.removeItem(draftKey);
+        });
+
+        // Initialize restore
+        setTimeout(restoreDraft, 500);
         
         // Thumbnail compression logic
         const thumbnailInput = document.getElementById('thumbnail');
@@ -287,6 +449,55 @@
                 }
             });
         }
+
+        // Initialize TomSelect for Category
+        const categoryTomSelect = new TomSelect("#category_id", {
+            create: function(input, callback) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                if (typeof indicator !== 'undefined') {
+                    indicator.textContent = 'Menambahkan kategori...';
+                    indicator.classList.remove('opacity-0');
+                }
+                
+                fetch("{{ route('admin.categories.api-store') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ name: input })
+                })
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Failed to create category');
+                })
+                .then(data => {
+                    callback({ value: data.id, text: data.name });
+                    if (typeof indicator !== 'undefined') {
+                        indicator.textContent = 'Kategori berhasil ditambahkan!';
+                        setTimeout(() => indicator.classList.add('opacity-0'), 2000);
+                    }
+                    document.getElementById('category_id').dispatchEvent(new Event('change'));
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Gagal membuat kategori. Pastikan nama unik (belum ada).');
+                    if (typeof indicator !== 'undefined') {
+                        indicator.classList.add('opacity-0');
+                    }
+                    callback(false);
+                });
+            },
+            placeholder: "Pilih atau ketik Kategori...",
+            render: {
+                option_create: function(data, escape) {
+                    return '<div class="create">Tambahkan kategori <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+                },
+                no_results: function(data, escape) {
+                    return '<div class="no-results p-2 text-slate-500">Kategori tidak ditemukan</div>';
+                },
+            }
+        });
     </script>
     <script src="{{ asset('js/seo-analyzer.js') }}"></script>
 @endsection

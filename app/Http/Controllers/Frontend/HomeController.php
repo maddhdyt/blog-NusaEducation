@@ -13,13 +13,20 @@ class HomeController extends Controller
 {
     public function __invoke()
     {
+        $heroPost = Post::published()
+            ->with(['category', 'user'])
+            ->orderByDesc('views')
+            ->latest('published_at')
+            ->first();
+
         $posts = Post::published()
             ->with(['category', 'user'])
+            ->when($heroPost, function($query) use ($heroPost) {
+                $query->where('id', '!=', $heroPost->id);
+            })
             ->latest('published_at')
             ->take(24)
             ->get();
-
-
 
         $categories = Category::has('publishedPosts')
             ->withCount('publishedPosts')
@@ -33,10 +40,10 @@ class HomeController extends Controller
         $galleryItems = GalleryItem::latest()->take(6)->get();
 
         return view('frontend.home', [
-            'heroPost' => $posts->first(),
-            'topStripPosts' => $posts->skip(1)->take(3),
-            'featureGridPosts' => $posts->take(6),
-            'spotlightPosts' => $posts->skip(10)->take(6),
+            'heroPost' => $heroPost,
+            'topStripPosts' => $posts->take(3),
+            'featureGridPosts' => $posts->skip(3)->take(6),
+            'spotlightPosts' => $posts->skip(9)->take(6),
             'trendingPosts' => $posts->take(6),
             'categories' => $categories,
             'sidebar' => $sidebar,

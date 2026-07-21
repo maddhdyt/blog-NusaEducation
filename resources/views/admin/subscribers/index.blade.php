@@ -31,7 +31,7 @@
                             <td class="py-4 px-6 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <form action="{{ route('admin.subscribers.destroy', $subscriber) }}" method="POST"
-                                        onsubmit="return confirm('Hapus subscriber ini?');" class="inline-block">
+                                        onsubmit="confirmDelete(event, this, 'Hapus Subscriber?', 'Subscriber ini akan dihapus permanen!');" class="inline-block">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-[#0a1435] bg-white text-red-600 hover:bg-[#ffccb0] hover:text-red-700 transition-colors text-xs font-bold uppercase tracking-wider">

@@ -48,6 +48,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('pages', PageController::class)->except(['show']);
     
     // Category Management
+    Route::post('categories/api-store', [CategoryController::class, 'apiStore'])->name('categories.api-store');
     Route::resource('categories', CategoryController::class)->except(['show']);
     
     // Post Management

@@ -35,7 +35,7 @@
                                         class="hover:underline font-bold uppercase">Edit</a>
                                     <span class="text-[#0a1435]/30">|</span>
                                     <form action="{{ route('admin.galleries.destroy', $item) }}" method="POST"
-                                        onsubmit="return confirm('Hapus foto ini?')">
+                                        onsubmit="confirmDelete(event, this, 'Hapus Foto?', 'Foto ini akan dihapus permanen!');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:underline font-bold uppercase">Hapus</button>

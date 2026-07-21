@@ -154,6 +154,55 @@
         </div>
     </form>
 
+    {{-- TomSelect assets --}}
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <style>
+        .ts-wrapper.form-input {
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+        .ts-wrapper {
+            margin-top: 0.25rem;
+        }
+        .ts-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .ts-control.focus {
+            border-color: #0a1435;
+            box-shadow: 0 0 0 2px rgba(10, 20, 53, 0.2);
+        }
+        .ts-wrapper.single .ts-control:after {
+            right: 1.25rem;
+        }
+        .ts-dropdown {
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 0.5rem 0;
+            margin-top: 0.25rem;
+        }
+        .ts-dropdown .create {
+            color: #f97316;
+            font-weight: 500;
+        }
+        .ts-dropdown .option, .ts-dropdown .create {
+            padding: 0.5rem 1rem;
+        }
+        .ts-dropdown .option.active, .ts-dropdown .create.active {
+            background-color: #f8fafc;
+            color: #0a1435;
+        }
+    </style>
+
     {{-- Quill assets and init --}}
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
@@ -341,6 +390,42 @@
                 }
             });
         }
+
+        // Initialize TomSelect for Category
+        const categoryTomSelect = new TomSelect("#category_id", {
+            create: function(input, callback) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                fetch("{{ route('admin.categories.api-store') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ name: input })
+                })
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Failed to create category');
+                })
+                .then(data => {
+                    callback({ value: data.id, text: data.name });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Gagal membuat kategori. Pastikan nama unik (belum ada).');
+                    callback(false);
+                });
+            },
+            placeholder: "Pilih atau ketik Kategori...",
+            render: {
+                option_create: function(data, escape) {
+                    return '<div class="create">Tambahkan kategori <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+                },
+                no_results: function(data, escape) {
+                    return '<div class="no-results p-2 text-slate-500">Kategori tidak ditemukan</div>';
+                },
+            }
+        });
     </script>
     <script src="{{ asset('js/seo-analyzer.js') }}"></script>
 @endsection

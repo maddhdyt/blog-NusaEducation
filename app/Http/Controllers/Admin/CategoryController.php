@@ -41,6 +41,31 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
+    public function apiStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        
+        $slug = Str::slug($validated['name']);
+        
+        if (Category::where('slug', $slug)->exists()) {
+            return response()->json(['message' => 'Category already exists'], 422);
+        }
+        
+        $category = Category::create([
+            'name' => $validated['name'],
+            'slug' => $slug,
+        ]);
+        
+        \Illuminate\Support\Facades\Cache::forget('footer_categories');
+        
+        return response()->json([
+            'id' => $category->id,
+            'name' => $category->name
+        ]);
+    }
+
     public function show(string $id)
     {
         //

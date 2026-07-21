@@ -176,7 +176,7 @@
                             <div class="w-8 h-8 rounded-full border border-[#0a1435] bg-white flex items-center justify-center text-[#0a1435] font-bold">
                                 {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
                             </div>
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form id="logout-form" method="POST" action="{{ route('logout') }}" onsubmit="confirmLogout(event, this)">
                                 @csrf
                                 <button type="submit" class="text-sm font-bold uppercase tracking-wider text-[#0a1435] hover:text-red-600 transition-colors">Logout</button>
                             </form>
@@ -225,7 +225,60 @@
 
     <!-- NProgress JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function confirmLogout(event, formElement) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Keluar dari Admin?',
+                text: 'Anda akan dialihkan ke halaman login.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0a1435',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                background: '#ffffff',
+                customClass: {
+                    title: 'text-[#0a1435] font-bold',
+                    popup: 'border border-[#0a1435]',
+                    confirmButton: 'font-bold tracking-wider rounded-none border border-[#0a1435]',
+                    cancelButton: 'font-bold tracking-wider rounded-none'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formElement.submit();
+                }
+            });
+        }
+
+        function confirmDelete(event, formElement, title = 'Apakah Anda yakin?', message = 'Data yang dihapus tidak dapat dikembalikan!') {
+            event.preventDefault();
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#0a1435',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                background: '#ffffff',
+                customClass: {
+                    title: 'text-[#0a1435] font-bold',
+                    popup: 'border border-[#0a1435]',
+                    confirmButton: 'font-bold tracking-wider rounded-none',
+                    cancelButton: 'font-bold tracking-wider rounded-none border border-[#0a1435]'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formElement.submit();
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             NProgress.configure({ showSpinner: false });
             document.querySelectorAll('a').forEach(function(anchor) {

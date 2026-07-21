@@ -47,6 +47,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@arkaseo.com',
             'password' => Hash::make('password'),
+            'role_title' => 'Kontributor',
+            'bio' => 'Ikuti akun kami untuk update terbaru seputar strategi digital dan artikel inspiratif.',
+            'tiktok_url' => '#',
+            'youtube_url' => '#',
+            'newsletter_url' => '#',
         ]);
         
         $admin->assignRole('admin');

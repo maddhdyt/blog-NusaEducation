@@ -23,6 +23,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_url',
+        'role_title',
+        'bio',
+        'tiktok_url',
+        'youtube_url',
+        'newsletter_url',
     ];
 
     /**

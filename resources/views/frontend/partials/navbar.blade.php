@@ -33,16 +33,23 @@
                                     @foreach ($menu->children as $child)
                                         <a href="{{ $child->getUrl() }}"
                                             class="flex items-start gap-4 p-3 hover:bg-[#FDF6F0] transition group/child">
+                                        @php
+                                            $iconClass = 'h-5 w-5';
+                                            $bgColor = 'bg-[#0a1435]';
+                                            
+                                            if ($child->url_type === 'category') {
+                                                $icon = '<svg class="'.$iconClass.'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" /></svg>';
+                                            } elseif ($child->url_type === 'page') {
+                                                $icon = '<svg class="'.$iconClass.'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.813-6.837c.31-.555.05-1.282-.575-1.477a1.35 1.35 0 00-1.632.7c-1.326 2.65-2.652 5.3-4.628 7.373z" /></svg>';
+                                            } elseif ($child->url_type === 'post') {
+                                                $icon = '<svg class="'.$iconClass.'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M4 17h16a1 1 0 001-1V8a1 1 0 00-1-1H4a1 1 0 00-1 1v8a1 1 0 001 1z" /></svg>';
+                                            } else {
+                                                $icon = '<svg class="'.$iconClass.'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>';
+                                            }
+                                        @endphp
                                             <span
-                                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center bg-[#0a1435] text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="1.5"
-                                                    class="h-5 w-5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M6.75 3.75h10.5a3 3 0 0 1 3 3v10.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.75a3 3 0 0 1 3-3Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M9 9h6M9 12h6M9 15h3" />
-                                                </svg>
+                                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center {{ $bgColor }} text-white group-hover/child:scale-110 transition-transform">
+                                                {!! $icon !!}
                                             </span>
                                             <span class="flex flex-col gap-1">
                                                 <span

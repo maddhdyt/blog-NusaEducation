@@ -221,35 +221,35 @@
                         </div>
                         <div class="flex items-center gap-4">
                             @php
-                                $avatar = optional($sidebar)->author_avatar_url ?:
-                                    'https://ui-avatars.com/api/?name=' . urlencode(optional($sidebar)->author_name ?? ($post->user->name ?? 'Author')) . '&background=0a1435&color=FDF6F0';
+                                $avatar = $post->user->avatar_url ?:
+                                    'https://ui-avatars.com/api/?name=' . urlencode($post->user->name ?? 'Author') . '&background=0a1435&color=FDF6F0';
                             @endphp
                             <img src="{{ $avatar }}"
-                                alt="{{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}"
+                                alt="{{ $post->user->name ?? 'Author' }}"
                                 class="h-16 w-16 mix-blend-multiply border border-[#e2d5cf] p-1 object-cover" />
                             <div>
                                 <p class="text-lg font-bold text-[#0a1435] font-sans">
-                                    {{ optional($sidebar)->author_name ?? ($post->user->name ?? 'Author') }}
+                                    {{ $post->user->name ?? 'Author' }}
                                 </p>
                                 <p class="text-[11px] text-[#735A56] font-mono tracking-widest uppercase mt-1">
-                                    {{ optional($sidebar)->author_role ?? 'Kontributor' }}
+                                    {{ $post->user->role_title ?? 'Kontributor' }}
                                 </p>
                             </div>
                         </div>
                         <p class="text-[15px] text-[#6b5b59] leading-relaxed">
-                            {{ optional($sidebar)->author_bio ?? 'Ikuti akun kami untuk update terbaru seputar strategi digital dan artikel inspiratif.' }}
+                            {{ $post->user->bio ?? 'Ikuti akun kami untuk update terbaru seputar strategi digital dan artikel inspiratif.' }}
                         </p>
                         <div class="flex flex-wrap gap-3">
-                            @if (optional($sidebar)->author_tiktok_url)
-                                <a href="{{ optional($sidebar)->author_tiktok_url }}"
+                            @if (optional($post->user)->tiktok_url)
+                                <a href="{{ $post->user->tiktok_url }}"
                                     class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">TikTok</a>
                             @endif
-                            @if (optional($sidebar)->author_youtube_url)
-                                <a href="{{ optional($sidebar)->author_youtube_url }}"
+                            @if (optional($post->user)->youtube_url)
+                                <a href="{{ $post->user->youtube_url }}"
                                     class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">YouTube</a>
                             @endif
-                            @if (optional($sidebar)->author_newsletter_url)
-                                <a href="{{ optional($sidebar)->author_newsletter_url }}"
+                            @if (optional($post->user)->newsletter_url)
+                                <a href="{{ $post->user->newsletter_url }}"
                                     class="border border-[#e2d5cf] hover:border-[#0a1435] hover:bg-[#0a1435] hover:text-[#FDF6F0] px-4 py-2 text-[11px] font-bold uppercase tracking-widest font-mono text-[#0a1435] transition">Newsletter</a>
                             @endif
                         </div>
