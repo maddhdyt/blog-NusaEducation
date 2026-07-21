@@ -51,6 +51,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('categories', CategoryController::class)->except(['show']);
     
     // Post Management
+    Route::post('posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload_image');
     Route::resource('posts', PostController::class)->except(['show']);
 
     // Gallery Management

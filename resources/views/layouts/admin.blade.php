@@ -27,8 +27,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-[#FDF6F0] text-[#433836] font-sans" x-data="{ sidebarOpen: true }">
-    <div class="flex min-h-screen overflow-hidden">
+<body class="bg-[#FDF6F0] text-[#433836] font-sans">
+    <div class="flex min-h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
         <!-- Sidebar -->
         <aside :class="sidebarOpen ? 'ml-0' : '-ml-64'" class="w-64 shrink-0 bg-white border-r border-[#0a1435] flex flex-col transition-all duration-300 h-screen overflow-hidden">
             <div class="h-20 border-b border-[#0a1435] flex items-center justify-start px-4 shrink-0">

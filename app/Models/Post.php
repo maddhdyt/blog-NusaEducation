@@ -63,7 +63,7 @@ class Post extends Model
 
     public function getThumbnailUrlAttribute(): ?string
     {
-        return $this->thumbnail ? Storage::url($this->thumbnail) : null;
+        return $this->thumbnail ? asset('storage/' . $this->thumbnail) : null;
     }
 
     public function scopePublished($query)

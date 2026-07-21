@@ -50,6 +50,7 @@
                                     <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p>
                                 @enderror
                                 <p class="text-xs font-bold text-gray-500 mt-2 uppercase tracking-wider">PNG, JPG, GIF up to 2MB</p>
+                                <p id="image-warning" class="text-xs font-bold mt-1 uppercase tracking-wider hidden"></p>
                             </div>
                             <div class="pt-4 border-t border-[#0a1435] flex gap-3">
                                 <button type="submit" class="w-full btn-primary py-3">Simpan</button>
@@ -60,4 +61,71 @@
             </div>
         </div>
     </form>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
+<script>
+    const imageInput = document.getElementById('image');
+    const imageWarning = document.getElementById('image-warning');
+    const submitBtn = document.querySelector('button[type="submit"]');
+
+    if (imageInput) {
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            
+            if (!file) {
+                if (imageWarning) imageWarning.classList.add('hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                imageWarning.textContent = `Ukuran asli ${(file.size / 1024 / 1024).toFixed(2)}MB. Sedang mengompresi...`;
+                imageWarning.classList.remove('hidden', 'text-red-500', 'text-green-500');
+                imageWarning.classList.add('text-orange-500');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                new Compressor(file, {
+                    quality: 0.8,
+                    maxWidth: 1920,
+                    maxHeight: 1920,
+                    success(result) {
+                        if (result.size > 2 * 1024 * 1024) {
+                            imageWarning.textContent = `Gagal! Setelah dikompresi ukuran masih ${(result.size / 1024 / 1024).toFixed(2)}MB (>2MB). Harap ganti gambar.`;
+                            imageWarning.classList.remove('text-orange-500', 'text-green-500');
+                            imageWarning.classList.add('text-red-500');
+                        } else {
+                            imageWarning.textContent = `Sukses! Dikompresi menjadi ${(result.size / 1024).toFixed(0)}KB. Aman diunggah.`;
+                            imageWarning.classList.remove('text-orange-500', 'text-red-500');
+                            imageWarning.classList.add('text-green-500');
+                            submitBtn.disabled = false;
+                            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                            
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(new File([result], result.name || 'image.jpg', { type: result.type }));
+                            imageInput.files = dataTransfer.files;
+                        }
+                    },
+                    error(err) {
+                        console.error(err.message);
+                        imageWarning.textContent = 'Gagal mengompresi gambar.';
+                        imageWarning.classList.remove('text-orange-500', 'text-green-500');
+                        imageWarning.classList.add('text-red-500');
+                    },
+                });
+            } else {
+                if (imageWarning) imageWarning.classList.add('hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        });
+    }
+</script>
 @endsection

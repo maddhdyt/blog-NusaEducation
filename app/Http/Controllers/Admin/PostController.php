@@ -61,7 +61,10 @@ class PostController extends Controller
         $validated['content'] = clean($validated['content']);
         
         if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            $file = $request->file('thumbnail');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/thumbnails'), $filename);
+            $validated['thumbnail'] = 'thumbnails/' . $filename;
         }
         
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -121,12 +124,26 @@ class PostController extends Controller
         
         $validated['content'] = clean($validated['content']);
         
-        if ($request->hasFile('thumbnail')) {
+        if ($request->has('remove_thumbnail') && $request->remove_thumbnail == '1') {
+            if ($post->thumbnail) {
+                $path = public_path('storage/' . $post->thumbnail);
+                if (file_exists($path)) {
+                    @unlink($path);
+                }
+            }
+            $validated['thumbnail'] = null;
+        } elseif ($request->hasFile('thumbnail')) {
             // Delete old thumbnail
             if ($post->thumbnail) {
-                Storage::disk('public')->delete($post->thumbnail);
+                $path = public_path('storage/' . $post->thumbnail);
+                if (file_exists($path)) {
+                    @unlink($path);
+                }
             }
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            $file = $request->file('thumbnail');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/thumbnails'), $filename);
+            $validated['thumbnail'] = 'thumbnails/' . $filename;
         }
         
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -155,7 +172,10 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if ($post->thumbnail) {
-            Storage::disk('public')->delete($post->thumbnail);
+            $path = public_path('storage/' . $post->thumbnail);
+            if (file_exists($path)) {
+                @unlink($path);
+            }
         }
         
         $post->delete();
@@ -202,5 +222,26 @@ class PostController extends Controller
         }
 
         return $slug;
+    }
+
+    /**
+     * Handle image upload from rich text editor (Quill).
+     */
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|file|max:5120', // Max 5MB
+        ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/post-images'), $filename);
+            return response()->json([
+                'url' => asset('storage/post-images/' . $filename)
+            ]);
+        }
+
+        return response()->json(['error' => 'Image upload failed'], 400);
     }
 }

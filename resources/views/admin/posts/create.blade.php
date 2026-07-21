@@ -131,6 +131,7 @@
                         <label class="form-label" for="thumbnail">Thumbnail Image</label>
                         <input type="file" name="thumbnail" id="thumbnail" class="form-input" accept="image/*">
                         <p class="text-xs font-bold text-gray-500 mt-2 uppercase tracking-wider">PNG, JPG, GIF up to 2MB</p>
+                        <p id="thumbnail-warning" class="text-xs font-bold mt-1 uppercase tracking-wider hidden"></p>
                     </div>
                 </div>
                 </div>
@@ -141,28 +142,78 @@
     {{-- Quill assets and init --}}
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
     <script>
+        function imageHandler() {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+
+            input.onchange = async () => {
+                const file = input.files[0];
+                if (!file) return;
+
+                const uploadFile = async (fileToUpload) => {
+                    const formData = new FormData();
+                    formData.append('image', fileToUpload, fileToUpload.name || 'image.jpg');
+                    try {
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        const response = await fetch("{{ route('admin.posts.upload_image') }}", {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-CSRF-TOKEN': csrfToken }
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            let range = quill.getSelection(true);
+                            let index = range ? range.index : quill.getLength();
+                            quill.insertEmbed(index, 'image', data.url);
+                            quill.setSelection(index + 1);
+                        } else {
+                            alert('Gagal mengunggah gambar. Pastikan ukuran di bawah 5MB.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan jaringan saat mengunggah.');
+                    }
+                };
+
+                if (file.size > 1024 * 1024) {
+                    new Compressor(file, {
+                        quality: 0.8,
+                        maxWidth: 1920,
+                        maxHeight: 1920,
+                        success(result) { uploadFile(result); },
+                        error(err) { 
+                            console.error('Compression error:', err.message);
+                            uploadFile(file);
+                        },
+                    });
+                } else {
+                    uploadFile(file);
+                }
+            };
+        }
+
         const quill = new Quill('#content-editor', {
             theme: 'snow',
             placeholder: 'Tulis konten di sini...',
             modules: {
-                toolbar: [
-                    [{
-                        header: [1, 2, 3, false]
-                    }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }],
-                    ['link', 'image'],
-                    ['blockquote', 'code-block'],
-                    [{
-                        align: []
-                    }],
-                    ['clean']
-                ]
+                toolbar: {
+                    container: [
+                        [{ header: [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['link', 'image'],
+                        ['blockquote', 'code-block'],
+                        [{ align: [] }],
+                        ['clean']
+                    ],
+                    handlers: {
+                        image: imageHandler
+                    }
+                }
             }
         });
 
@@ -173,6 +224,69 @@
 
         // Initialize with existing content if any (ensures hidden input synced on load)
         contentInput.value = quill.root.innerHTML;
+        
+        // Thumbnail compression logic
+        const thumbnailInput = document.getElementById('thumbnail');
+        const thumbnailWarning = document.getElementById('thumbnail-warning');
+        const submitBtn = document.querySelector('button[type="submit"]');
+
+        if (thumbnailInput) {
+            thumbnailInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                
+                if (!file) {
+                    if (thumbnailWarning) thumbnailWarning.classList.add('hidden');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                    return;
+                }
+
+                if (file.size > 2 * 1024 * 1024) {
+                    thumbnailWarning.textContent = `Ukuran asli ${(file.size / 1024 / 1024).toFixed(2)}MB. Sedang mengompresi...`;
+                    thumbnailWarning.classList.remove('hidden', 'text-red-500', 'text-green-500');
+                    thumbnailWarning.classList.add('text-orange-500');
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                    new Compressor(file, {
+                        quality: 0.8,
+                        maxWidth: 1920,
+                        maxHeight: 1920,
+                        success(result) {
+                            if (result.size > 2 * 1024 * 1024) {
+                                thumbnailWarning.textContent = `Gagal! Setelah dikompresi ukuran masih ${(result.size / 1024 / 1024).toFixed(2)}MB (>2MB). Harap ganti gambar.`;
+                                thumbnailWarning.classList.remove('text-orange-500', 'text-green-500');
+                                thumbnailWarning.classList.add('text-red-500');
+                            } else {
+                                thumbnailWarning.textContent = `Sukses! Dikompresi menjadi ${(result.size / 1024).toFixed(0)}KB. Aman diunggah.`;
+                                thumbnailWarning.classList.remove('text-orange-500', 'text-red-500');
+                                thumbnailWarning.classList.add('text-green-500');
+                                submitBtn.disabled = false;
+                                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                                
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(new File([result], result.name || 'thumbnail.jpg', { type: result.type }));
+                                thumbnailInput.files = dataTransfer.files;
+                            }
+                        },
+                        error(err) {
+                            console.error(err.message);
+                            thumbnailWarning.textContent = 'Gagal mengompresi gambar.';
+                            thumbnailWarning.classList.remove('text-orange-500', 'text-green-500');
+                            thumbnailWarning.classList.add('text-red-500');
+                        },
+                    });
+                } else {
+                    if (thumbnailWarning) thumbnailWarning.classList.add('hidden');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+            });
+        }
     </script>
     <script src="{{ asset('js/seo-analyzer.js') }}"></script>
 @endsection
