@@ -110,7 +110,7 @@
                 </div>
 
                 <!-- Organization Card -->
-                <div class="card p-6">
+                <div class="card p-6" style="overflow: visible;">
                     <h3 class="text-sm font-bold text-[#0a1435] mb-4 pb-2 border-b border-[#0a1435] uppercase tracking-wider">Organization</h3>
                     <div>
                         <label class="form-label" for="category_id">Category *</label>
