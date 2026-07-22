@@ -58,13 +58,25 @@ class SidebarSettingController extends Controller
         $setting = SidebarSetting::first() ?? new SidebarSetting();
 
         if ($request->hasFile('site_logo')) {
-            $path = $request->file('site_logo')->store('sidebar/logo', 'public');
-            $data['site_logo_url'] = Storage::url($path);
+            $file = $request->file('site_logo');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/sidebar/logo');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $data['site_logo_url'] = asset('storage/sidebar/logo/' . $filename);
         }
 
         if ($request->hasFile('author_avatar')) {
-            $path = $request->file('author_avatar')->store('sidebar/avatars', 'public');
-            $data['author_avatar_url'] = Storage::url($path);
+            $file = $request->file('author_avatar');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/sidebar/avatars');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $data['author_avatar_url'] = asset('storage/sidebar/avatars/' . $filename);
         }
 
         $setting->fill($data);

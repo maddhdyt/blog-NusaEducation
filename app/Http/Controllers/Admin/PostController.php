@@ -61,8 +61,14 @@ class PostController extends Controller
         $validated['content'] = clean($validated['content']);
         
         if ($request->hasFile('thumbnail')) {
-            $path = $request->file('thumbnail')->store('thumbnails', 'public');
-            $validated['thumbnail'] = $path;
+            $file = $request->file('thumbnail');
+            $filename = \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/thumbnails');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $validated['thumbnail'] = 'thumbnails/' . $filename;
         }
         
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -138,8 +144,14 @@ class PostController extends Controller
                     @unlink($path);
                 }
             }
-            $path = $request->file('thumbnail')->store('thumbnails', 'public');
-            $validated['thumbnail'] = $path;
+            $file = $request->file('thumbnail');
+            $filename = \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/thumbnails');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $validated['thumbnail'] = 'thumbnails/' . $filename;
         }
         
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -230,9 +242,15 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('post-images', 'public');
+            $file = $request->file('image');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/post-images');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
             return response()->json([
-                'url' => asset('storage/' . $path)
+                'url' => asset('storage/post-images/' . $filename)
             ]);
         }
 

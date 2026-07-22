@@ -47,8 +47,14 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('users/avatars', 'public');
-            $user->avatar_url = asset('storage/' . $path);
+            $file = $request->file('avatar');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/users/avatars');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $user->avatar_url = asset('storage/users/avatars/' . $filename);
         } else if (!empty($data['avatar_url'])) {
             $user->avatar_url = $data['avatar_url'];
         }
@@ -95,8 +101,14 @@ class UserController extends Controller
         }
 
         if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('users/avatars', 'public');
-            $user->avatar_url = asset('storage/' . $path);
+            $file = $request->file('avatar');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('storage/users/avatars');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $user->avatar_url = asset('storage/users/avatars/' . $filename);
         } else if (array_key_exists('avatar_url', $data)) {
             $user->avatar_url = $data['avatar_url'];
         }
