@@ -29,39 +29,42 @@
 </head>
 
 <body class="bg-[#FDF6F0] text-[#433836] font-sans">
-    <div class="flex min-h-screen overflow-hidden" x-data="{ mobileOpen: false }">
+    <div class="flex min-h-screen overflow-hidden" x-data="{ mobileOpen: false, desktopCollapsed: false }">
 
         <!-- Mobile Overlay -->
         <div x-show="mobileOpen" 
              @click="mobileOpen = false" 
-             x-transition:enter="transition-opacity ease-linear duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-linear duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-             x-cloak>
+             style="display: none;"
+             x-transition.opacity
+             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden">
         </div>
 
         <!-- Mobile Sidebar -->
-        <aside :class="mobileOpen ? 'translate-x-0' : '-translate-x-full'" 
-               class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#0a1435] flex flex-col transition-transform duration-300 h-full lg:hidden shrink-0">
+        <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#0a1435] flex flex-col h-full lg:hidden shrink-0 transition-transform duration-300"
+               style="transform: translateX(-100%);"
+               :style="mobileOpen ? 'transform: translateX(0);' : 'transform: translateX(-100%);'">
             @include('layouts.partials.admin-sidebar')
         </aside>
 
         <!-- Desktop Sidebar -->
-        <aside class="hidden lg:flex w-64 bg-white border-r border-[#0a1435] flex-col h-screen shrink-0">
+        <aside class="hidden lg:flex w-64 bg-white border-r border-[#0a1435] flex-col h-screen shrink-0 transition-all duration-300"
+               style="margin-left: 0;"
+               :style="desktopCollapsed ? 'margin-left: -16rem;' : 'margin-left: 0;'">
             @include('layouts.partials.admin-sidebar')
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden h-screen min-w-0">
+        <div class="flex-1 flex flex-col overflow-hidden h-screen min-w-0 transition-all duration-300">
             <!-- Header -->
             <header class="bg-[#FDF6F0] border-b border-[#0a1435] h-16 md:h-20 shrink-0">
                 <div class="flex items-center justify-between px-4 md:px-8 h-full">
                     <div class="flex items-center gap-3 md:gap-4 min-w-0">
                         <button @click="mobileOpen = !mobileOpen" class="lg:hidden text-[#0a1435] hover:text-brand-primary transition-colors focus:outline-none shrink-0 p-1">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        <button @click="desktopCollapsed = !desktopCollapsed" class="hidden lg:block text-[#0a1435] hover:text-brand-primary transition-colors focus:outline-none shrink-0 p-1">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
