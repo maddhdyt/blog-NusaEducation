@@ -63,7 +63,11 @@ class PostController extends Controller
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
             $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/thumbnails'), $filename);
+            $destinationPath = public_path('storage/thumbnails');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
             $validated['thumbnail'] = 'thumbnails/' . $filename;
         }
         
@@ -142,7 +146,11 @@ class PostController extends Controller
             }
             $file = $request->file('thumbnail');
             $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/thumbnails'), $filename);
+            $destinationPath = public_path('storage/thumbnails');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
             $validated['thumbnail'] = 'thumbnails/' . $filename;
         }
         
@@ -236,7 +244,11 @@ class PostController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/post-images'), $filename);
+            $destinationPath = public_path('storage/post-images');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
             return response()->json([
                 'url' => asset('storage/post-images/' . $filename)
             ]);

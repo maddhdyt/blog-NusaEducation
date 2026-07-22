@@ -49,7 +49,11 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/users/avatars'), $filename);
+            $destinationPath = public_path('storage/users/avatars');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
             $user->avatar_url = asset('storage/users/avatars/' . $filename);
         } else if (!empty($data['avatar_url'])) {
             $user->avatar_url = $data['avatar_url'];
@@ -99,7 +103,11 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/users/avatars'), $filename);
+            $destinationPath = public_path('storage/users/avatars');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
             $user->avatar_url = asset('storage/users/avatars/' . $filename);
         } else if (array_key_exists('avatar_url', $data)) {
             $user->avatar_url = $data['avatar_url'];
