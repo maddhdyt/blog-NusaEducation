@@ -73,5 +73,41 @@ class Post extends Model
             ->where('published_at', '<=', now());
     }
 
+    public function getParsedContentAttribute(): array
+    {
+        $content = $this->content;
+        $toc = [];
 
+        if (empty($content)) {
+            return ['html' => '', 'toc' => []];
+        }
+
+        libxml_use_internal_errors(true);
+        $dom = new \DOMDocument();
+        $dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        $xpath = new \DOMXPath($dom);
+        $headings = $xpath->query('//h2 | //h3');
+
+        foreach ($headings as $index => $node) {
+            $text = $node->textContent;
+            if (empty(trim($text))) {
+                continue;
+            }
+            $slug = Str::slug($text) . '-' . $index;
+            $node->setAttribute('id', $slug);
+
+            $toc[] = [
+                'level' => (int) str_replace('h', '', strtolower($node->nodeName)),
+                'title' => $text,
+                'id' => $slug,
+            ];
+        }
+
+        return [
+            'html' => $dom->saveHTML(),
+            'toc' => $toc,
+        ];
+    }
 }

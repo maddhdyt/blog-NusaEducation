@@ -65,18 +65,22 @@
         .quill-content a:hover {
             color: #1786F8;
         }
-        .quill-content h2, .quill-content h3, .quill-content h4 {
-            color: #0a1435;
-            font-family: 'Feature', serif;
-            font-weight: 500;
-            margin-top: 3rem;
-            margin-bottom: 1.25rem;
+        .quill-content h2, .quill-content h3, .quill-content h4,
+        .quill-content h2 *, .quill-content h3 *, .quill-content h4 * {
+            color: #0a1435 !important;
+            font-family: 'Feature', serif !important;
+            font-weight: 500 !important;
         }
-        .quill-content h2 { font-size: 1.75rem; }
-        .quill-content h3 { font-size: 1.5rem; }
+        .quill-content h2, .quill-content h3, .quill-content h4 {
+            margin-top: 3rem !important;
+            margin-bottom: 1.25rem !important;
+            line-height: 1.3 !important;
+        }
+        .quill-content h2, .quill-content h2 * { font-size: 1.75rem !important; }
+        .quill-content h3, .quill-content h3 * { font-size: 1.5rem !important; }
         @media (min-width: 768px) {
-            .quill-content h2 { font-size: 2.5rem; }
-            .quill-content h3 { font-size: 1.875rem; }
+            .quill-content h2, .quill-content h2 * { font-size: 2.5rem !important; }
+            .quill-content h3, .quill-content h3 * { font-size: 1.875rem !important; }
         }
         .quill-content ul {
             list-style: disc;
@@ -172,10 +176,31 @@
                         </div>
                     @endif
 
-                    <!-- Article Body -->
+                    <!-- Article Body and TOC -->
+                    @php
+                        $parsedData = $post->parsed_content;
+                        $contentHtml = $parsedData['html'];
+                        $toc = $parsedData['toc'];
+                    @endphp
+
                     <div class="mt-12">
+                        @if (!empty($toc))
+                            <div class="bg-white border border-[#e2d5cf] p-6 lg:p-8 mb-10">
+                                <h3 class="text-xl font-bold text-[#0a1435] font-sans mb-4 uppercase tracking-widest text-sm border-b border-[#e2d5cf] pb-3">Daftar Isi</h3>
+                                <ul class="space-y-3 font-medium text-[#433836]">
+                                    @foreach ($toc as $item)
+                                        <li class="{{ $item['level'] === 3 ? 'ml-4 lg:ml-6' : '' }}">
+                                            <a href="#{{ $item['id'] }}" class="hover:text-brand-primary transition underline decoration-[#e2d5cf] underline-offset-4 hover:decoration-brand-primary">
+                                                {{ $item['title'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="quill-content w-full">
-                            {!! $post->content !!}
+                            {!! $contentHtml !!}
                         </div>
                     </div>
 
