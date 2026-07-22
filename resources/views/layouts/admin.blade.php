@@ -29,11 +29,14 @@
 </head>
 
 <body class="bg-[#FDF6F0] text-[#433836] font-sans">
-    <div class="flex min-h-screen overflow-hidden" x-data="{ mobileOpen: false, desktopCollapsed: false }">
+    <div class="flex min-h-screen overflow-hidden" 
+         x-data="{ sidebarOpen: false }" 
+         x-init="sidebarOpen = window.innerWidth >= 1024"
+         @resize.window.debounce.100ms="if (window.innerWidth >= 1024) sidebarOpen = true">
 
         <!-- Mobile Overlay -->
-        <div x-show="mobileOpen" 
-             @click="mobileOpen = false" 
+        <div x-show="sidebarOpen && window.innerWidth < 1024" 
+             @click="sidebarOpen = false" 
              x-transition:enter="transition-opacity ease-linear duration-200"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -45,20 +48,14 @@
         </div>
 
         <!-- Sidebar -->
-        <aside :class="{
-                   'translate-x-0': mobileOpen,
-                   '-translate-x-full': !mobileOpen,
-                   'lg:translate-x-0': true,
-                   'lg:-ml-64': desktopCollapsed,
-                   'lg:ml-0': !desktopCollapsed
-               }" 
-               class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#0a1435] flex flex-col transition-all duration-300 h-full overflow-hidden lg:static lg:h-screen lg:z-auto shrink-0">
+        <aside :class="sidebarOpen ? 'translate-x-0 lg:ml-0' : '-translate-x-full lg:translate-x-0 lg:-ml-64'" 
+               class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#0a1435] flex flex-col transition-all duration-300 h-full lg:h-screen lg:static lg:z-auto shrink-0">
             <div class="h-20 border-b border-[#0a1435] flex items-center justify-between px-4 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="inline-block">
                     <img src="{{ $siteLogo }}" alt="Nusa Education" class="h-12 md:h-14 w-auto">
                 </a>
                 <!-- Close Button on Mobile -->
-                <button @click="mobileOpen = false" class="lg:hidden text-[#0a1435] hover:text-brand-primary p-1 focus:outline-none">
+                <button @click="sidebarOpen = false" class="lg:hidden text-[#0a1435] hover:text-brand-primary p-1 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -183,7 +180,7 @@
             <header class="bg-[#FDF6F0] border-b border-[#0a1435] h-16 md:h-20 shrink-0">
                 <div class="flex items-center justify-between px-4 md:px-8 h-full">
                     <div class="flex items-center gap-3 md:gap-4 min-w-0">
-                        <button @click="if (window.innerWidth < 1024) { mobileOpen = !mobileOpen } else { desktopCollapsed = !desktopCollapsed }" class="text-[#0a1435] hover:text-brand-primary transition-colors focus:outline-none shrink-0 p-1">
+                        <button @click="sidebarOpen = !sidebarOpen" class="text-[#0a1435] hover:text-brand-primary transition-colors focus:outline-none shrink-0 p-1">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
