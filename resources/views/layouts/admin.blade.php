@@ -19,6 +19,7 @@
     <!-- NProgress CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
     <style>
+        [x-cloak] { display: none !important; }
         #nprogress .bar { background: #0a1435 !important; height: 3px !important; }
         #nprogress .peg { box-shadow: 0 0 10px #0a1435, 0 0 5px #0a1435 !important; }
         #nprogress .spinner-icon { border-top-color: #0a1435 !important; border-left-color: #0a1435 !important; }
@@ -28,13 +29,36 @@
 </head>
 
 <body class="bg-[#FDF6F0] text-[#433836] font-sans">
-    <div class="flex min-h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
+    <div class="flex min-h-screen overflow-hidden" 
+         x-data="{ sidebarOpen: window.innerWidth >= 1024 }" 
+         @resize.window.debounce.100ms="if (window.innerWidth >= 1024) sidebarOpen = true">
+
+        <!-- Mobile Overlay -->
+        <div x-show="sidebarOpen" 
+             @click="sidebarOpen = false" 
+             x-transition:enter="transition-opacity ease-linear duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-linear duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+             x-cloak>
+        </div>
+
         <!-- Sidebar -->
-        <aside :class="sidebarOpen ? 'ml-0' : '-ml-64'" class="w-64 shrink-0 bg-white border-r border-[#0a1435] flex flex-col transition-all duration-300 h-screen overflow-hidden">
-            <div class="h-20 border-b border-[#0a1435] flex items-center justify-start px-4 shrink-0">
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:-ml-64'" 
+               class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#0a1435] flex flex-col transition-all duration-300 h-full overflow-hidden lg:static lg:z-auto shrink-0">
+            <div class="h-20 border-b border-[#0a1435] flex items-center justify-between px-4 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="inline-block">
-                    <img src="{{ $siteLogo }}" alt="Nusa Education" class="h-14 w-auto">
+                    <img src="{{ $siteLogo }}" alt="Nusa Education" class="h-12 md:h-14 w-auto">
                 </a>
+                <!-- Close Button on Mobile -->
+                <button @click="sidebarOpen = false" class="lg:hidden text-[#0a1435] hover:text-brand-primary p-1 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
 
             <nav class="p-4 overflow-y-auto flex-1">
@@ -150,35 +174,38 @@
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden h-screen">
+        <div class="flex-1 flex flex-col overflow-hidden h-screen min-w-0">
             <!-- Header -->
-            <header class="bg-[#FDF6F0] border-b border-[#0a1435] h-20 shrink-0">
-                <div class="flex items-center justify-between px-8 h-full">
-                    <div class="flex items-center gap-4">
-                        <button @click="sidebarOpen = !sidebarOpen" class="text-[#0a1435] hover:text-brand-primary transition-colors focus:outline-none">
+            <header class="bg-[#FDF6F0] border-b border-[#0a1435] h-16 md:h-20 shrink-0">
+                <div class="flex items-center justify-between px-4 md:px-8 h-full">
+                    <div class="flex items-center gap-3 md:gap-4 min-w-0">
+                        <button @click="sidebarOpen = !sidebarOpen" class="text-[#0a1435] hover:text-brand-primary transition-colors focus:outline-none shrink-0 p-1">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </button>
-                        <h1 class="text-3xl font-heading text-[#0a1435] tracking-tight">@yield('page_title', 'Dashboard')</h1>
+                        <h1 class="text-lg sm:text-xl md:text-3xl font-heading text-[#0a1435] tracking-tight truncate">@yield('page_title', 'Dashboard')</h1>
                     </div>
 
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3 md:gap-6 shrink-0">
                         <a href="{{ route('home') }}" target="_blank"
-                            class="text-sm font-bold uppercase tracking-wider text-[#0a1435] hover:text-brand-primary transition-colors flex items-center gap-2">
+                            class="text-xs md:text-sm font-bold uppercase tracking-wider text-[#0a1435] hover:text-brand-primary transition-colors flex items-center gap-1.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            View Site
+                            <span class="hidden sm:inline">View Site</span>
                         </a>
                         
-                        <div class="h-6 w-px bg-[#0a1435]"></div>
+                        <div class="h-5 md:h-6 w-px bg-[#0a1435]"></div>
 
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full border border-[#0a1435] bg-white flex items-center justify-center text-[#0a1435] font-bold">
+                        <div class="flex items-center gap-2 md:gap-3">
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full border border-[#0a1435] bg-white flex items-center justify-center text-[#0a1435] font-bold text-xs md:text-sm shrink-0">
                                 {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
                             </div>
                             <form id="logout-form" method="POST" action="{{ route('logout') }}" onsubmit="confirmLogout(event, this)">
                                 @csrf
-                                <button type="submit" class="text-sm font-bold uppercase tracking-wider text-[#0a1435] hover:text-red-600 transition-colors">Logout</button>
+                                <button type="submit" class="text-xs md:text-sm font-bold uppercase tracking-wider text-[#0a1435] hover:text-red-600 transition-colors flex items-center gap-1">
+                                    <span class="hidden sm:inline">Logout</span>
+                                    <svg class="w-4 h-4 sm:hidden text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -186,7 +213,7 @@
             </header>
 
             <!-- Content -->
-            <main class="flex-1 p-6 overflow-y-auto overflow-x-hidden">
+            <main class="flex-1 p-4 md:p-6 overflow-y-auto overflow-x-hidden">
                 @if (session('success'))
                     <div x-data="{ show: true }" x-show="show" class="mb-6 p-4 bg-green-100 border border-[#0a1435] text-[#0a1435] font-semibold text-sm flex justify-between items-center">
                         <span>{{ session('success') }}</span>

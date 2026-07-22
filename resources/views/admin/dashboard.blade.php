@@ -10,7 +10,7 @@
         </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         <!-- Stat Card 1 -->
         <div class="bg-[#ffccb0] border border-[#0a1435] rounded-none p-6 group transition-transform hover:-translate-y-1">
             <div class="flex items-start justify-between">
