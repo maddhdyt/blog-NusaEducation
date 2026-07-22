@@ -61,14 +61,8 @@ class PostController extends Controller
         $validated['content'] = clean($validated['content']);
         
         if ($request->hasFile('thumbnail')) {
-            $file = $request->file('thumbnail');
-            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('storage/thumbnails');
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-            $file->move($destinationPath, $filename);
-            $validated['thumbnail'] = 'thumbnails/' . $filename;
+            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $validated['thumbnail'] = $path;
         }
         
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -144,14 +138,8 @@ class PostController extends Controller
                     @unlink($path);
                 }
             }
-            $file = $request->file('thumbnail');
-            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('storage/thumbnails');
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-            $file->move($destinationPath, $filename);
-            $validated['thumbnail'] = 'thumbnails/' . $filename;
+            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $validated['thumbnail'] = $path;
         }
         
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -242,15 +230,9 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('storage/post-images');
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-            $file->move($destinationPath, $filename);
+            $path = $request->file('image')->store('post-images', 'public');
             return response()->json([
-                'url' => asset('storage/post-images/' . $filename)
+                'url' => asset('storage/' . $path)
             ]);
         }
 
