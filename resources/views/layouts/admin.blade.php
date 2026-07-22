@@ -28,7 +28,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<<body class="bg-[#FDF6F0] text-[#433836] font-sans">
+<body class="bg-[#FDF6F0] text-[#433836] font-sans">
     <div class="flex min-h-screen overflow-hidden" x-data="{ mobileOpen: false }">
 
         <!-- Mobile Overlay -->
